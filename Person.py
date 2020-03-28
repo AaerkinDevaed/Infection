@@ -22,6 +22,8 @@ class Person:
     def move(self, home, position, still_working, age):
         if(still_working):
             self.position = self.position + avg_speed * 2 * avg_age / age * self.direct(home, position)
+        else:
+            self.position = self.position + avg_speed * avg_age / age * self.direct(home, position)
             
     def direct(self, home, position):
         home_direct = home - position
