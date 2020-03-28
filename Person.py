@@ -5,8 +5,9 @@ Created on %(date)s
 @author: %(Daniil Huryn)s
 """
 import random
+import math
 import numpy as np
-from sklearn import preprocessing
+
 
 radius = 10
 avg_speed = 1
@@ -25,23 +26,38 @@ class Person:
         self.time_sick = 0
         
     def move(self):
+        
         if(self.still_working):
-            self.position = self.position + avg_speed * work_increase_in_chance * avg_age / self.age * self.direct(self.home, self.position)
+            direc = self.direct()
+            
+            self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[0]
+            self.position[1] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[1]
+            
         else:
-            self.position = self.position + avg_speed * avg_age / self.age * self.direct(self.home, self.position)
-
+            direc = self.direct()
+            self.position[0] = self.position[0] + avg_speed *  avg_age / self.age * direc[0]
+            self.position[1] = self.position[0] + avg_speed *  avg_age / self.age * direc[1]
+        
             
     def direct(self):
-        home_direct = self.home - self.position
-        sp = [random.gauss(home_direct(0), 1), random.gauss(home_direct(1),1)]
-        sp_norm = preprocessing.normalize(sp, norm='l2')
-        return sp_norm
+        home_direct=[0,0]
+        home_direct[0] = self.home[0] - self.position[0]
+        
+        home_direct[1] = self.home[1] - self.position[1]
+        sp = [random.gauss(home_direct[0], 1), random.gauss(home_direct[1],1)]
+        
+        norm = math.sqrt(sp[0]**2+sp[1]**2)
+        sp[0] = sp[0] / (norm)
+        sp[0] = sp[1] / (norm)
+        
+        return sp
     
     def change_in_status (self, people_list):
         if self.status == "Healthy": 
             count = 0
-            for i in people_list:
-                if np.linalg.norm(people_list(0) - self.position) <= radius:
+            for i in people_list: 
+                pos=self.position
+                if math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2) <= radius:
                     count += 1
                     stay_healthy = (1 - inf_prob)**count
                     if random.randrange(0,1) > stay_healthy:
