@@ -37,13 +37,14 @@ class City:
         self.people_list[self.patient_zero][1].status = "Infected"
 
     def next_day(self):
-        for p in self.people_list[1]:
-            p.move()
-        for p in self.people_list[1]:
-            before = p.status
-            p.change_in_status(self.people_list)
-            if(before != p.status):
-                self.adjust(before, p.status)
+        for p in self.people_list:
+            p[1].move()
+        for p in self.people_list:
+            person = p[1]
+            before = person.status
+            person.change_in_status(self.people_list)
+            if(before != person.status):
+                self.adjust(before, person.status)
 
     def adjust(self, before, after):
         if(before == "Healthy"):
