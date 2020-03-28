@@ -12,27 +12,29 @@ class City:
             self.homes += 1
         self.people_list = []
         self.side_length = np.sqrt(self.area)
-        self.home_placement = np.linspace(0,self.area,self.homes)
+        self.x_home_placement = np.linspace(0,self.side_length, np.sqrt(self.homes))
+        self.y_home_placement = np.linspace(0,self.side_length, np.sqrt(self.homes))
         self.num_immune = 0
         self.num_healthy = len(self.people_list) - 1
         self.num_infected = 1
+        self.patient_zero = int(random.random() * population)
         counter = 0
-        for home in self.home_placement:
-            x_home = home % self.side_length
-            y_home = home / self.side_length
-            for p in range(5):
-                if(counter > self.population):
-                    break
-                age = random.random() * life_expectancy
-                status = "Healthy"
-                still_working = False
-                if(20 < age < 60 and random.random() * 100 < 20):
-                    still_working = True
-                home = [x_home, y_home]
-                position =[x_home, y_home]
-                p = Person(age, home, status, position, still_working)
-                self.people_list.append([position, p])
-                counter += 1
+        for x_home in self.x_home_placement:
+            for y_home in self.y_home_placement:
+                for p in range(5):
+                    if(counter > self.population):
+                        break
+                    age = random.random() * life_expectancy
+                    status = "Healthy"
+                    still_working = False
+                    if(20 < age < 60 and random.random() * 100 < 20):
+                        still_working = True
+                    home = [x_home, y_home]
+                    position =[x_home, y_home]
+                    p = Person(age, home, status, position, still_working)
+                    self.people_list.append([position, p])
+                    counter += 1
+        self.people_list[self.patient_zero].status = "Infected"
 
     def next_day(self):
         for p in self.people_list[1]:
