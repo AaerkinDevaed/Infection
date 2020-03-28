@@ -25,7 +25,7 @@ class Person:
             
     def direct(self, home, position):
         home_direct = home - position
-        sp = [random.gauss(-10,10), random.randrange(-10,10)]
+        sp = [random.gauss(home_direct(0), 1), random.gauss(home_direct(1),1)]
         sp_norm = preprocessing.normalize(sp, norm='l2')
         return sp_norm
         
