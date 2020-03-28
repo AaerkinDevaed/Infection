@@ -13,6 +13,7 @@ avg_speed = 1
 avg_age = 40
 inf_prob = 0.2
 avg_sicktime = 14
+work_increase_in_chance = 2
 
 class Person:
     def _init_(self, age, home, status, position, still_working, time_sick):
@@ -25,7 +26,7 @@ class Person:
         
     def move(self, home, position, still_working, age):
         if(still_working):
-            self.position = self.position + avg_speed * 2 * avg_age / age * self.direct(home, position)
+            self.position = self.position + avg_speed *work_increase_in_chance * avg_age / age * self.direct(home, position)
         else:
             self.position = self.position + avg_speed * avg_age / age * self.direct(home, position)
 
