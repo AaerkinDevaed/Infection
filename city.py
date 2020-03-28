@@ -13,6 +13,9 @@ class City:
         self.people_list = []
         self.side_length = np.sqrt(self.area)
         self.home_placement = np.linspace(0,self.area,self.homes)
+        self.num_immune = 0
+        self.num_healthy = len(self.people_list) - 1
+        self.num_infected = 1
         counter = 0
         for home in self.home_placement:
             x_home = home % self.side_length
@@ -30,3 +33,23 @@ class City:
                 p = Person(age, home, status, position, still_working)
                 self.people_list.append([position, p])
                 counter += 1
+
+    def next_day(self):
+        for p in self.people_list[1]:
+            p.move()
+        for p in self.people_list[1]:
+            before = p.status
+            p.change_in_status(self.people_list)
+            if(before != p.status):
+                self.adjust(before, p.status)
+
+    def adjust(self, before, after):
+        if(before == "Healthy"):
+            self.num_healthy -= 1
+        else:
+            self.num_infected -= 1
+        if(after == "Immune"):
+            self.num_immune += 1
+        else:
+            self.num_infected += 1
+
