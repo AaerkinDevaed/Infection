@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 
 def main():
-    houston = City(36620, 3662)
+    houston = City(3662, 3662)
 
     simulation_length = 365
     time = np.arange(0,simulation_length)
@@ -21,9 +21,6 @@ def main():
         healthy.append(houston.num_healthy)
         infected.append(houston.num_infected)
 
-    print(immune)
-    print(infected)
-    print(healthy)
     plt.plot(time, immune, color = "green", label = "Immune")
     plt.plot(time, infected, color = "red", label = "Infected")
     plt.plot(time, healthy, color = "blue", label = "Healthy")
