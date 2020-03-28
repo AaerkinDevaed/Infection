@@ -14,10 +14,6 @@ class City:
         self.side_length = np.sqrt(self.area)
         self.x_home_placement = np.linspace(0,self.side_length, np.sqrt(self.homes))
         self.y_home_placement = np.linspace(0,self.side_length, np.sqrt(self.homes))
-        self.num_immune = 0
-        self.num_healthy = len(self.people_list) - 1
-        self.num_infected = 1
-        self.patient_zero = int(random.random() * population)
         counter = 0
         for x_home in self.x_home_placement:
             for y_home in self.y_home_placement:
@@ -34,6 +30,10 @@ class City:
                     p = Person(age, home, status, position, still_working)
                     self.people_list.append([position, p])
                     counter += 1
+        self.num_immune = 0
+        self.num_healthy = len(self.people_list) - 1
+        self.num_infected = 1
+        self.patient_zero = int(random.random() * population)
         self.people_list[self.patient_zero][1].status = "Infected"
 
     def next_day(self):
