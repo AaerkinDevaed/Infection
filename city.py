@@ -34,7 +34,7 @@ class City:
                     p = Person(age, home, status, position, still_working)
                     self.people_list.append([position, p])
                     counter += 1
-        self.people_list[self.patient_zero].status = "Infected"
+        self.people_list[self.patient_zero][1].status = "Infected"
 
     def next_day(self):
         for p in self.people_list[1]:
