@@ -24,15 +24,15 @@ class Person:
         self.still_working = still_working
         self.time_sick = 0
         
-    def move(self, home, position, still_working, age):
-        if(still_working):
-            self.position = self.position + avg_speed * work_increase_in_chance * avg_age / age * self.direct(home, position)
+    def move(self):
+        if(self.still_working):
+            self.position = self.position + avg_speed * work_increase_in_chance * avg_age / self.age * self.direct(self.home, self.position)
         else:
-            self.position = self.position + avg_speed * avg_age / age * self.direct(home, position)
+            self.position = self.position + avg_speed * avg_age / self.age * self.direct(self.home, self.position)
 
             
-    def direct(self, home, position):
-        home_direct = home - position
+    def direct(self):
+        home_direct = self.home - self.position
         sp = [random.gauss(home_direct(0), 1), random.gauss(home_direct(1),1)]
         sp_norm = preprocessing.normalize(sp, norm='l2')
         return sp_norm
