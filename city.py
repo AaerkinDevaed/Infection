@@ -1,5 +1,5 @@
 import numpy as np
-import Person
+from Person import Person
 import random
 life_expectancy = 80
 class City:
@@ -27,7 +27,8 @@ class City:
                     still_working = True
                 home = [x_home, y_home]
                 position =[x_home, y_home]
-                self.people_list.append([position], Person.Person(age, home, status, position, still_working))
+                p = Person(age, home, status, position, still_working)
+                self.people_list.append([position, p])
                 counter += 1
 
 Houston = City(4000, 40)
