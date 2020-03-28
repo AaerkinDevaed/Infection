@@ -6,7 +6,7 @@ class City:
     def __init__(self, population, pop_density):
         self.population = population
         self.pop_density = pop_density
-        self.area = pop_density / float(population)
+        self.area = float(population) / pop_density
         self.homes = population / 5
         if population % 5 != 0:
             self.homes += 1
@@ -30,7 +30,3 @@ class City:
                 p = Person(age, home, status, position, still_working)
                 self.people_list.append([position, p])
                 counter += 1
-
-Houston = City(4000, 40)
-print(Houston.people_list)
-
