@@ -1,10 +1,14 @@
-
+import tkinter
 from city import City
 import numpy as np
 import matplotlib.pyplot as plt
+import time as timeimp
 
 def sim(pop, dens):
-    rand_city = City(pop, dens)
+    tk = tkinter.Tk()
+    canvas = tkinter.Canvas(tk, width=1600, height=900, bg="white")
+    canvas.pack()
+    rand_city = City(canvas, pop, dens)
 
     simulation_length = 40
     time = np.arange(0,simulation_length)
@@ -26,8 +30,9 @@ def sim(pop, dens):
         dead.append(0.03*i)
     for i, d in enumerate(dead):
         immune[i] - d
-
-    print(dead)
+    timeimp.sleep(5)
+    tk.mainloop()    
+    
     plt.plot(time, immune, color = "green", label = "Immune")
     plt.plot(time, infected, color = "red", label = "Infected")
     plt.plot(time, healthy, color = "blue", label = "Healthy")
@@ -36,6 +41,6 @@ def sim(pop, dens):
     plt.xlabel("# of Days")
     plt.ylabel("# of People")
     plt.show()
-
+    
 if __name__ == "__main__":
     sim(500,300)

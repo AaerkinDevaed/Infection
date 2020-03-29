@@ -7,7 +7,8 @@ Created on %(date)s
 import random
 import math
 import numpy as np
-
+from tkinter import *
+import time
 
 radius = .05
 avg_speed = .01
@@ -17,7 +18,7 @@ avg_sicktime = 14
 work_increase_in_chance = 15
 
 class Person:
-    def __init__(self, age, home, status, position, still_working, edge_size):
+    def __init__(self, canvas, age, home, status, position, still_working, edge_size):
         self.age = age
         self.side_length = edge_size
         self.home = home
@@ -25,6 +26,13 @@ class Person:
         self.position = position
         self.still_working = still_working
         self.time_sick = 0
+        self.canvas = canvas
+        if status == "Infected":
+            self.shape = canvas.create_oval(self.position[0]*10, self.position[1]*10, 100, 100, fill='red') #self.position[1]*10+800
+        if status == "Healthy":
+            self.shape = canvas.create_oval(self.position[0]*10, self.position[1]*10, 1, 1, fill='blue')
+        if status == "Immune":
+            self.shape = canvas.create_oval(self.position[0]*10, self.position[1]*10, 5, 5, fill='grey')
 
     def move(self):
         if(self.still_working):
@@ -32,16 +40,19 @@ class Person:
 
             self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[0]
             self.position[1] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[1]
+            self.canvas.move(self.shape, avg_speed * work_increase_in_chance * avg_age * 10 / self.age * direc[0], avg_speed * work_increase_in_chance * avg_age / self.age * direc[1])
 
         else:
             direc = self.direct()
             self.position[0] = self.position[0] + avg_speed *  avg_age / self.age * direc[0]
             self.position[1] = self.position[0] + avg_speed *  avg_age / self.age * direc[1]
+            self.canvas.move(self.shape, avg_speed * avg_age * 10 / self.age * direc[0], avg_speed * work_increase_in_chance * avg_age / self.age * direc[1])
 
         if(self.position[0] > self.side_length or self.position[0] < 0):
             self.position[0] = self.home[0]
         if(self.position[1] > self.side_length or self.position[1] < 0):
             self.position[1] = self.home[1]
+        
     def direct(self):
         home_direct=[0,0]
         home_direct[0] = self.home[0] - self.position[0]

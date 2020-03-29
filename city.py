@@ -1,9 +1,13 @@
 import numpy as np
 from Person import Person
 import random
+import tkinter
+import time
+
 life_expectancy = 80
 class City:
-    def __init__(self, population, pop_density):
+    def __init__(self, canvas, population, pop_density):
+        self.canvas = canvas
         self.population = population
         self.pop_density = pop_density
         self.area = float(population) / pop_density
@@ -27,7 +31,7 @@ class City:
                         still_working = True
                     home = [x_home, y_home]
                     position =[x_home, y_home]
-                    p = Person(age, home, status, position, still_working, self.side_length)
+                    p = Person(self.canvas, age, home, status, position, still_working, self.side_length)
                     self.people_list.append([position, p])
                     counter += 1
         self.num_immune = 0
