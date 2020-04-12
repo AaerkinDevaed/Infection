@@ -1,5 +1,5 @@
 import numpy as np
-from np.random import random
+from numpy.random import random
 from Person import Person
 
 class City:
@@ -7,9 +7,9 @@ class City:
 
         # Percent of people still working based on city type
         self.perc_working_dict = {
-            "Urban" : 20,
-            "Semi-Urban" : 10,
-            "Rural" : 5
+            "Urban" : .20,
+            "Semi-Urban" : .10,
+            "Rural" : .05
         }
         # Life Expectancy based on city-type.
         # This makes almost no difference sorry for including.
@@ -21,9 +21,9 @@ class City:
         # Percent of people who know they are sick
         # (efficiency of testing, basically)
         self.testing_efficieny_dict = {
-            "Urban" : 50,
-            "Semi-Urban" : 40,
-            "Rural" : 35
+            "Urban" : .03,
+            "Semi-Urban" : .02,
+            "Rural" : .01
         }
 
         # Social Distancing Policies based on city-type and infection level
@@ -55,24 +55,24 @@ class City:
         self.life_expectancy = self.life_expectancy_dict[city_type]
         self.chance_know_sick = self.testing_efficieny_dict[city_type]
 
-        self.city_type == city_type
+        self.city_type = city_type
         self.population = population - population % 5
         self.pop_density = pop_density
         self.area = float(population) / pop_density
-        self.homes = population / 5
+        self.homes = int(population / 5)
         self.people_list = []
         self.side_length = np.sqrt(self.area)
 
         # Populate our city with people and houses
         for x in range(self.homes):
             # Randomly generate x and y coordinates of homes
-            x_home = random.random()*self.side_length
-            y_home = random.random()*self.side_length
+            x_home = random()*self.side_length
+            y_home = random()*self.side_length
 
             # Put 5 people in each house
             for p in range(5):
                 # Randoma age
-                age = random.random() * self.life_expectancy
+                age = random() * self.life_expectancy
                 # Start out as healthy
                 status = "Healthy"
                 # Default to not still_working (for once social
@@ -80,7 +80,7 @@ class City:
                 still_working = False
                 # We'll say perc_working of people age 20-60
                 # still work out of house
-                if(20 < age < 60 and random.random() * 100 < self.perc_working):
+                if(20 < age < 60 and random() < self.perc_working):
                     still_working = True
                 home = [x_home, y_home]
                 position =[x_home, y_home]
@@ -97,14 +97,14 @@ class City:
         # Set number of quarantined people to 0
         self.num_quarantined = 0
         # Select the lucky patient zero randomly
-        self.patient_zero = int(random.random() * population)
+        self.patient_zero = int(random() * population)
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
 
     def next_day(self):
         # Check how many people are infected. A value of
         # 1 corresponds to .1% of population, 2 to .2%, etc
-        perc_inf_adj = int((float(self.num_infected) / self.population) / .001)
+        perc_inf_adj = int((float(self.num_infected) / self.population) / .01)
 
         # If more than .4% of the population is infected, full
         # social distancing policies are in place.
@@ -132,6 +132,7 @@ class City:
             person = p[1]
             if person.status == "Newly Infected":
                 person.status = "Infected"
+                self.num_infected += 1
 
     def adjust(self, before, after):
         if(before == "Healthy"):
@@ -139,14 +140,15 @@ class City:
         elif(before == "Quarantined"):
             self.num_infected -= 1
             self.num_quarantined -= 1
-        elif(before == "Infected"):
-            self.num_infected -=1
+        elif before == "Infected" and after == "Immune":
+            self.num_infected -= 1
+
         if(after == "Immune"):
             self.num_immune += 1
         elif(after == "Infected"):
             self.num_infected += 1
         elif(after == "Quarantined"):
-            self.num_quarantined +=1
+            self.num_quarantined += 1
 
     def print_pos(self, day):
         print("DAY {}".format(day))
