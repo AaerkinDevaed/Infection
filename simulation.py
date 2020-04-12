@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time as timeimp
 
+<<<<<<< Updated upstream
 def sim(pop, dens):
     tk = tkinter.Tk()
     canvas = tkinter.Canvas(tk, width=1600, height=900, bg="white")
@@ -42,5 +43,20 @@ def sim(pop, dens):
     plt.ylabel("# of People")
     plt.show()
     
+=======
+def main():
+
+    tk = tkinter.Tk()
+    canvas = tkinter.Canvas(tk, width=1600, height=900, bg="white")
+    canvas.pack()
+    hOuSToN = City(canvas, 1500, 300, "Urban")
+    for i in np.arange(1,100):
+        hOuSToN.next_day()
+
+
+    tk.mainloop()
+
+
+>>>>>>> Stashed changes
 if __name__ == "__main__":
     sim(500,300)
