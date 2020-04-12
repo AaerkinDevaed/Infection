@@ -11,7 +11,7 @@ import numpy as np
 
 radius = .05
 avg_age = 40
-inf_prob = 0.2
+inf_prob = .8
 avg_sicktime = 14
 
 class Person:
@@ -68,14 +68,24 @@ class Person:
                     distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
                     if distance <= radius:
                         count += 1
+                if i[1].status == "Quarantined":
+                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
+                    if distance <= radius:
+                        count += 0.2
+
             stay_healthy = (1 - inf_prob)**count
             if random.random() > stay_healthy:
                 self.status = "Newly Infected"
 
-        elif self.status == "Infected" or self.status == "Quarantined":
+        elif self.status == "Infected":
             self.time_sick += 1
             if random.random() < .85 * chance_know_sick:
                 self.status = "Quarantined"
                 self.position = self.home
+            if random.random() < self.time_sick / avg_sicktime:
+                self.status = "Immune"
+
+        elif self.status == "Quarantined":
+            self.time_sick += 1
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"

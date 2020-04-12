@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 
 def main():
-    houston = City(1500, 300)
+    houston = City(1500, 300, "Urban")
 
     simulation_length = 30
     time = np.arange(0,simulation_length)
@@ -16,8 +16,11 @@ def main():
     quarantined = [0]
 
     for t in time[1:]:
+        # Update time
         houston.next_day()
+        # Change newly_infected to infected
         houston.change_infected()
+        # Change totals in lists
         immune.append(houston.num_immune)
         healthy.append(houston.num_healthy)
         infected.append(houston.num_infected)
