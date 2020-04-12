@@ -14,6 +14,7 @@ def main():
     healthy = [len(houston.people_list) - 1]
     infected = [1]
     quarantined = [0]
+    dead = [0]
 
     for t in time[1:]:
         # Update time
@@ -21,22 +22,20 @@ def main():
         # Change newly_infected to infected
         houston.change_infected()
         # Change totals in lists
-        immune.append(houston.num_immune)
+        immune.append(int(houston.num_immune * 0.97))
         healthy.append(houston.num_healthy)
         infected.append(houston.num_infected)
         quarantined.append(houston.num_quarantined)
+        dead.append(int(0.03*houston.num_immune))
 
-    dead = [0]
-    for i in immune[1:]:
-        dead.append(0.03*i)
-    for i, d in enumerate(dead):
-        immune[i] - d
     print_info(dead, time, immune, infected, healthy, quarantined)
 
 
 
 def print_info(dead, time, immune, infected, healthy, quarantined):
     print(dead)
+    print(immune)
+    print(infected)
     plt.plot(time, immune, color = "green", label = "Immune")
     plt.plot(time, infected, color = "red", label = "Infected")
     plt.plot(time, healthy, color = "blue", label = "Healthy")

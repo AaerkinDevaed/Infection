@@ -58,6 +58,9 @@ class City:
             3 : [.07, .5/.07],
             4 : [.05, 10]
         }
+        # use dicts to assign values depending on city type.
+        # Probably could have used a factory constructor to make this
+        # much better
         self.perc_obey = self.testing_obey_dict[city_type]
         self.perc_working = self.perc_working_dict[city_type]
         self.life_expectancy = self.life_expectancy_dict[city_type]
@@ -69,10 +72,23 @@ class City:
         self.pop_density = pop_density
         self.area = float(population) / pop_density
         self.homes = int(population / 5)
+        self.markets = int(population / 500)
+        self.icus = int(population / 500)
         self.people_list = []
         self.side_length = np.sqrt(self.area)
 
-        # Populate our city with people and houses
+        # Populate our city with markets
+        self.market_list = []
+        for x in range(self.markets):
+            market_position = [random()*self.side_length, random()*self.side_length]
+            self.market_list.append(market_position)
+
+        self.icu_list = []
+        for x in range(self.icus):
+            icu_position = [random()*self.side_length, random()*self.side_length]
+            self.icu_list.append(icu_position)
+
+        # Populate our city with people, houses
         for x in range(self.homes):
             # Randomly generate x and y coordinates of homes
             x_home = random()*self.side_length
@@ -87,13 +103,18 @@ class City:
                 # Default to not still_working (for once social
                 # distancing policies are put in place)
                 still_working = False
+                icu_worker = False
+                icu = self.icu_list[int(random()*self.icus)]
                 # We'll say perc_working of people age 20-60
                 # still work out of house
                 if(20 < age < 60 and random() < self.perc_working):
                     still_working = True
+                    if (random() < 0.1):
+                        icu_worker = True
                 home = [x_home, y_home]
                 position =[x_home, y_home]
-                p = Person(age, home, status, position, still_working, self.side_length)
+                market = self.market_list[int(random()*self.markets)]
+                p = Person(age, home, status, position, still_working, icu_worker, self.side_length, market, icu)
                 self.people_list.append([position, p])
 
         # We'll say nobody starts out as immune
