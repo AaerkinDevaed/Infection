@@ -10,11 +10,9 @@ import numpy as np
 
 
 radius = .05
-avg_speed = .01
 avg_age = 40
 inf_prob = 0.2
 avg_sicktime = 14
-work_increase_in_chance = 15
 
 class Person:
     def __init__(self, age, home, status, position, still_working, edge_size):
@@ -26,7 +24,12 @@ class Person:
         self.still_working = still_working
         self.time_sick = 0
 
-    def move(self):
+    def move(self, avg_speed, work_increase_in_chance):
+        if(self.status == "Quarantined"):
+            return
+        if(self.time_sick > 8):
+            self.still_working = False
+
         if(self.still_working):
             direc = self.direct()
 
@@ -42,6 +45,7 @@ class Person:
             self.position[0] = self.home[0]
         if(self.position[1] > self.side_length or self.position[1] < 0):
             self.position[1] = self.home[1]
+
     def direct(self):
         home_direct=[0,0]
         home_direct[0] = self.home[0] - self.position[0]
@@ -55,7 +59,7 @@ class Person:
 
         return sp
 
-    def change_in_status (self, people_list):
+    def change_in_status (self, people_list, chance_know_sick):
         if self.status == "Healthy":
             count = 0
             pos=self.position
@@ -67,7 +71,11 @@ class Person:
             stay_healthy = (1 - inf_prob)**count
             if random.random() > stay_healthy:
                 self.status = "Newly Infected"
-        elif self.status == "Infected":
+
+        elif self.status == "Infected" or self.status == "Quarantined":
             self.time_sick += 1
+            if random.random() < .85 * chance_know_sick:
+                self.status = "Quarantined"
+                self.position = self.home
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
