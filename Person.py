@@ -34,12 +34,13 @@ class Person:
             direc = self.direct()
 
             self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[0]
-            self.position[1] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[1]
+            self.position[1] = self.position[1] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[1]
 
         else:
             direc = self.direct()
+
             self.position[0] = self.position[0] + avg_speed *  avg_age / self.age * direc[0]
-            self.position[1] = self.position[0] + avg_speed *  avg_age / self.age * direc[1]
+            self.position[1] = self.position[1] + avg_speed *  avg_age / self.age * direc[1]
 
         if(self.position[0] > self.side_length or self.position[0] < 0):
             self.position[0] = self.home[0]
@@ -59,7 +60,7 @@ class Person:
 
         return sp
 
-    def change_in_status (self, people_list, chance_know_sick):
+    def change_in_status (self, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
             count = 0
             pos=self.position
@@ -79,7 +80,7 @@ class Person:
 
         elif self.status == "Infected":
             self.time_sick += 1
-            if random.random() < .85 * chance_know_sick:
+            if random.random() < perc_obey * chance_know_sick:
                 self.status = "Quarantined"
                 self.position = self.home
             if random.random() < self.time_sick / avg_sicktime:
