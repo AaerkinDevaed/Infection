@@ -10,7 +10,6 @@ import numpy as np
 
 
 radius = .05
-avg_age = 40
 inf_prob = .8
 avg_sicktime = 14
 
@@ -33,14 +32,14 @@ class Person:
         if(self.still_working):
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[0]
-            self.position[1] = self.position[1] + avg_speed * work_increase_in_chance * avg_age / self.age * direc[1]
+            self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * direc[0]
+            self.position[1] = self.position[1] + avg_speed * work_increase_in_chance * direc[1]
 
         else:
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed *  avg_age / self.age * direc[0]
-            self.position[1] = self.position[1] + avg_speed *  avg_age / self.age * direc[1]
+            self.position[0] = self.position[0] + avg_speed * direc[0]
+            self.position[1] = self.position[1] + avg_speed * direc[1]
 
         if(self.position[0] > self.side_length or self.position[0] < 0):
             self.position[0] = self.home[0]
@@ -75,6 +74,8 @@ class Person:
                         count += 0.2
 
             stay_healthy = (1 - inf_prob)**count
+            if stay_healthy > .8:
+                stay_healthy = .8
             if random.random() > stay_healthy:
                 self.status = "Newly Infected"
 
