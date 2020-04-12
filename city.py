@@ -3,7 +3,7 @@ from numpy.random import random
 from Person import Person
 
 class City:
-    def __init__(self, population, pop_density, city_type):
+    def __init__(self, population, pop_density, city_type, city_name):
 
         # Percent of people still working based on city type
         self.perc_working_dict = {
@@ -21,9 +21,16 @@ class City:
         # Percent of people who know they are sick
         # (efficiency of testing, basically)
         self.testing_efficieny_dict = {
-            "Urban" : .03,
-            "Semi-Urban" : .02,
-            "Rural" : .01
+            "Urban" : .3,
+            "Semi-Urban" : .2,
+            "Rural" : .1
+        }
+        # Percent of people who know they are sick
+        # and so quarantine themselves
+        self.testing_obey_dict = {
+            "Urban" : .85,
+            "Semi-Urban" : .7,
+            "Rural" : .4
         }
 
         # Social Distancing Policies based on city-type and infection level
@@ -51,10 +58,12 @@ class City:
             3 : [.07, .5/.07],
             4 : [.05, 10]
         }
+        self.perc_obey = self.testing_obey_dict[city_type]
         self.perc_working = self.perc_working_dict[city_type]
         self.life_expectancy = self.life_expectancy_dict[city_type]
         self.chance_know_sick = self.testing_efficieny_dict[city_type]
 
+        self.city_name = city_name
         self.city_type = city_type
         self.population = population - population % 5
         self.pop_density = pop_density
@@ -68,6 +77,7 @@ class City:
             # Randomly generate x and y coordinates of homes
             x_home = random()*self.side_length
             y_home = random()*self.side_length
+            print(x_home, y_home)
 
             # Put 5 people in each house
             for p in range(5):
@@ -122,7 +132,7 @@ class City:
         for p in self.people_list:
             person = p[1]
             before = person.status
-            person.change_in_status(self.people_list, self.chance_know_sick)
+            person.change_in_status(self.people_list, self.chance_know_sick, self.perc_obey)
             if(before != person.status):
                 self.adjust(before, person.status)
 

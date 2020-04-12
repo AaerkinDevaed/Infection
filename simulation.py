@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 
 def main():
-    houston = City(1500, 300, "Urban")
+    houston = City(1500, 300, "Urban", "Houston")
 
     simulation_length = 30
     time = np.arange(0,simulation_length)
@@ -49,4 +49,3 @@ def print_info(dead, time, immune, infected, healthy, quarantined):
 
 if __name__ == "__main__":
     main()
-
