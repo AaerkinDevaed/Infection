@@ -77,7 +77,6 @@ class City:
             # Randomly generate x and y coordinates of homes
             x_home = random()*self.side_length
             y_home = random()*self.side_length
-            print(x_home, y_home)
 
             # Put 5 people in each house
             for p in range(5):
