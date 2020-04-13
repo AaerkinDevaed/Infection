@@ -87,11 +87,11 @@ class Person:
             pos = self.position
             for i in people_list:
                 if i[1].status == "Infected":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
+                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
                     if distance <= radius:
                         count += 1
                 if i[1].status == "Quarantined":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
+                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
                     if distance <= radius:
                         if i[1].position == i[1].local_icu:
                             count += 0.01
@@ -105,6 +105,7 @@ class Person:
                 self.status = "Newly Infected"
 
         elif self.status == "Infected":
+            print(self.position)
             self.time_sick += 1
             if random.random() < perc_obey * chance_know_sick:
                 self.status = "Quarantined"
