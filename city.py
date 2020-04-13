@@ -126,6 +126,8 @@ class City:
         self.num_infected = 1
         # Set number of quarantined people to 0
         self.num_quarantined = 0
+        # Set number of people in ICU to 0
+        self.num_icu = 0
         # Select the lucky patient zero randomly
         self.patient_zero = int(random() * population)
         # Set status of patient zero to infected
@@ -152,9 +154,15 @@ class City:
         for p in self.people_list:
             person = p[1]
             before = person.status
+            before_position = person.position
             person.change_in_status(self.people_list, self.chance_know_sick, self.perc_obey)
             if(before != person.status):
                 self.adjust(before, person.status)
+            if person.status == "Quarantined" and person.position == person.local_icu:
+                self.num_icu += 1
+            if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
+                self.num_icu -= 1
+
 
 
     def change_infected(self):
