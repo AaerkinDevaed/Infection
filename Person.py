@@ -30,6 +30,9 @@ class Person:
         self.time_to_last_market = 0
 
     def move(self, avg_speed, work_increase_in_chance):
+        if(self.status == "Quarantined"):
+            return
+
         if(self.icu_worker == True):
             if self.position == self.local_icu:
                 self.positon = self.home
@@ -39,9 +42,6 @@ class Person:
 
         if(self.position == self.local_market):
             self.position == self.home
-            return
-
-        if(self.status == "Quarantined"):
             return
 
         if random.random() < self.time_to_last_market / avg_markettime:
@@ -84,7 +84,7 @@ class Person:
     def change_in_status (self, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
             count = 0
-            pos=self.position
+            pos = self.position
             for i in people_list:
                 if i[1].status == "Infected":
                     distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
@@ -93,7 +93,10 @@ class Person:
                 if i[1].status == "Quarantined":
                     distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
                     if distance <= radius:
-                        count += 0.2
+                        if i[1].position == i[1].local_icu:
+                            count += 0.01
+                        else:
+                            count += 0.1
 
             stay_healthy = (1 - inf_prob)**count
             if stay_healthy < .2:
