@@ -1,10 +1,14 @@
 import numpy as np
 from numpy.random import random
 from Person import Person
+from tkinter import *
 
+shift = 400
+scale = 100
 class City:
-    def __init__(self, population, pop_density, city_type, city_name):
+    def __init__(self, canvas, population, pop_density, city_type, city_name):
 
+        self.canvas = canvas
         # Percent of people still working based on city type
         self.perc_working_dict = {
             "Urban" : .20,
@@ -28,7 +32,7 @@ class City:
         # Percent of people who know they are sick
         # and so quarantine themselves
         self.testing_obey_dict = {
-            "Urban" : .85,
+            "Urban" : .3,
             "Semi-Urban" : .7,
             "Rural" : .4
         }
@@ -80,7 +84,7 @@ class City:
 
             # Put 5 people in each house
             for p in range(5):
-                # Randoma age
+                # Random age
                 age = random() * self.life_expectancy
                 # Start out as healthy
                 status = "Healthy"
@@ -93,7 +97,7 @@ class City:
                     still_working = True
                 home = [x_home, y_home]
                 position =[x_home, y_home]
-                p = Person(age, home, status, position, still_working, self.side_length)
+                p = Person(self.canvas, age, home, status, position, still_working, self.side_length)
                 self.people_list.append([position, p])
 
         # We'll say nobody starts out as immune
@@ -109,6 +113,7 @@ class City:
         self.patient_zero = int(random() * population)
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
+        self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
 
     def next_day(self):
         # Check how many people are infected. A value of
@@ -125,7 +130,7 @@ class City:
         # Move all people
         for p in self.people_list:
             p[1].move(new_speed, new_mult)
-
+            print()
         # Chance to change status, if status changes, update
         # counts
         for p in self.people_list:
@@ -134,6 +139,7 @@ class City:
             person.change_in_status(self.people_list, self.chance_know_sick, self.perc_obey)
             if(before != person.status):
                 self.adjust(before, person.status)
+        #self.canvas.update()
 
 
     def change_infected(self):

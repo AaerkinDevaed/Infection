@@ -3,49 +3,35 @@ from city import City
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import tkinter
+
+def n(tk, h):
+    h.next_day()
+    tk.update()
+    tk.after(0, n(tk, h))
+    #tk.after_idle(n, tk, h)
 
 def main():
-    houston = City(1500, 300, "Urban", "Houston")
+    tk = tkinter.Tk()
+    canvas = tkinter.Canvas(tk, width=1600, height=900, bg="white")
+    canvas.pack()
+    houston = City(canvas, 500, 900, "Urban", "Houston")
 
-    simulation_length = 30
-    time = np.arange(0,simulation_length)
-
-    immune = [0]
-    healthy = [len(houston.people_list) - 1]
-    infected = [1]
-    quarantined = [0]
-
-    for t in time[1:]:
-        # Update time
-        houston.next_day()
-        # Change newly_infected to infected
-        houston.change_infected()
-        # Change totals in lists
-        immune.append(houston.num_immune)
-        healthy.append(houston.num_healthy)
-        infected.append(houston.num_infected)
-        quarantined.append(houston.num_quarantined)
-
-    dead = [0]
-    for i in immune[1:]:
-        dead.append(0.03*i)
-    for i, d in enumerate(dead):
-        immune[i] - d
-    print_info(dead, time, immune, infected, healthy, quarantined)
+    n(tk, houston)
+    tk.after(0, n(tk, houston))
+    #while houston.num_immune != houston.population:
+     #   houston.next_day()
+     #   print(1)
+    tk.mainloop()
 
 
 
-def print_info(dead, time, immune, infected, healthy, quarantined):
-    print(dead)
-    plt.plot(time, immune, color = "green", label = "Immune")
-    plt.plot(time, infected, color = "red", label = "Infected")
-    plt.plot(time, healthy, color = "blue", label = "Healthy")
-    plt.plot(time, quarantined, color = "yellow", label = "Quarantined")
-    plt.plot(time, dead, color = "black", label = "Dead")
-    plt.legend()
-    plt.xlabel("# of Days")
-    plt.ylabel("# of People")
-    plt.show()
+
+
+   # tk.mainloop()
+
+
+
 
 if __name__ == "__main__":
     main()

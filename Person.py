@@ -7,23 +7,29 @@ Created on %(date)s
 import random
 import math
 import numpy as np
-
-
-radius = .05
+from tkinter import *
+speed_shift = 20
+shift = 400
+scale = 100
+radius = 0.05
 inf_prob = .8
 avg_sicktime = 14
+size = 4
 
 class Person:
-    def __init__(self, age, home, status, position, still_working, edge_size):
+    def __init__(self, canvas, age, home, status, position, still_working, edge_size):
+        self.canvas = canvas
         self.age = age
-        self.side_length = edge_size
+        self.side_length = edge_size*100
         self.home = home
         self.status = status
         self.position = position
         self.still_working = still_working
         self.time_sick = 0
+        self.shape = canvas.create_oval(self.position[0]*scale+shift, self.position[1]*scale+shift, self.position[0]*scale+size+shift, self.position[1]*scale+size+shift, fill='blue')
 
-    def move(self, avg_speed, work_increase_in_chance):
+
+    def move(self, speed, work_increase_in_chance):
         if(self.status == "Quarantined"):
             return
         if(self.time_sick > 8):
@@ -32,19 +38,30 @@ class Person:
         if(self.still_working):
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * direc[0]
-            self.position[1] = self.position[1] + avg_speed * work_increase_in_chance * direc[1]
+            self.position[0] = self.position[0] + speed * work_increase_in_chance * direc[0]
+            self.position[1] = self.position[1] + speed * work_increase_in_chance * direc[1]
+            self.canvas.move(self.shape, speed * work_increase_in_chance * direc[0] * speed_shift,
+                             speed * work_increase_in_chance * direc[1] * speed_shift)
+
 
         else:
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed * direc[0]
-            self.position[1] = self.position[1] + avg_speed * direc[1]
+            self.position[0] = self.position[0] + speed * direc[0]
+            self.position[1] = self.position[1] + speed * direc[1]
+            self.canvas.move(self.shape, speed * direc[0] * speed_shift,
+                             speed * direc[1] * speed_shift)
 
-        if(self.position[0] > self.side_length or self.position[0] < 0):
+        if(np.abs(self.position[0] - self.home[0]) > 10):
+            self.canvas.move(self.shape, self.home[0]*scale  - self.position[0] * scale,
+                             0)
             self.position[0] = self.home[0]
-        if(self.position[1] > self.side_length or self.position[1] < 0):
+
+        if(np.abs(self.position[1] - self.home[1]) > 10):
+            self.canvas.move(self.shape, 0,
+                             (self.home[1]*scale) - (self.position[1]*scale))
             self.position[1] = self.home[1]
+
 
     def direct(self):
         home_direct=[0,0]
@@ -62,7 +79,7 @@ class Person:
     def change_in_status (self, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
             count = 0
-            pos=self.position
+            pos = self.position
             for i in people_list:
                 if i[1].status == "Infected":
                     distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
@@ -74,20 +91,23 @@ class Person:
                         count += 0.2
 
             stay_healthy = (1 - inf_prob)**count
-            if stay_healthy > .8:
-                stay_healthy = .8
+            if stay_healthy < .2:
+                stay_healthy = .2
             if random.random() > stay_healthy:
                 self.status = "Newly Infected"
+                self.canvas.itemconfig(self.shape, fill='red')
 
         elif self.status == "Infected":
             self.time_sick += 1
+            self.canvas.itemconfig(self.shape, fill='red')
             if random.random() < perc_obey * chance_know_sick:
                 self.status = "Quarantined"
                 self.position = self.home
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
-
+                self.canvas.itemconfig(self.shape, fill='grey')
         elif self.status == "Quarantined":
             self.time_sick += 1
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
+                self.canvas.itemconfig(self.shape, fill='grey')
