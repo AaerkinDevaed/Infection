@@ -84,13 +84,13 @@ class City:
         for x in range(self.markets):
             market_position = [random()*self.side_length, random()*self.side_length]
             self.market_list.append(market_position)
-            self.canvas.create_text(market_position[0] * scale + shift, market_position[1] * scale + shift, text="MARKET")
+            self.canvas.create_text(market_position[0] * scale + shift, market_position[1] * scale + shift, text="MARKET", font=("Purisa", 20), fill="Green")
 
         self.icu_list = []
         for x in range(self.icus):
             icu_position = [random()*self.side_length, random()*self.side_length]
             self.icu_list.append(icu_position)
-            self.canvas.create_text(icu_position[0] * scale + shift, icu_position[1] * scale + shift, text="ICU")
+            self.canvas.create_text(icu_position[0] * scale + shift, icu_position[1] * scale + shift, text="ICU", font=("Purisa", 20), fill="Purple")
 
         # Populate our city with people, houses
         for x in range(self.homes):
@@ -137,6 +137,11 @@ class City:
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
         self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
+        self.patient_zero = int(random() * population)
+        # Set status of patient zero to infected
+        self.people_list[self.patient_zero][1].status = "Infected"
+        self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
+
 
     def next_day(self):
         # Check how many people are infected. A value of

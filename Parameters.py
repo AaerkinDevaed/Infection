@@ -1,8 +1,9 @@
-size = 5
-shift = 200
+size = 8
+shift = 100
 scale = 200
-radius = .05
+radius = .2
 inf_prob = .8
 avg_sicktime = 14
 avg_markettime = 5
 perc_to_icu = 0.03
+death_rate = 0.05

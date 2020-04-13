@@ -102,11 +102,11 @@ class Person:
             pos = self.position
             for i in people_list:
                 if i[1].status == "Infected":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
+                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
                     if distance <= radius:
                         count += 1
                 if i[1].status == "Quarantined":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][0] - pos[1])**2)
+                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
                     if distance <= radius:
                         if i[1].position == i[1].local_icu:
                             count += 0.01
@@ -131,6 +131,8 @@ class Person:
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
                 self.canvas.itemconfig(self.shape, fill='grey')
+                if random.random() < death_rate:
+                    self.canvas.delete(self.shape)
 
         elif self.status == "Quarantined":
             self.time_sick += 1
@@ -138,6 +140,7 @@ class Person:
                 self.canvas.move(self.shape, self.local_icu[0] * scale - self.position[0] * scale,
                                  (self.local_icu[1] * scale) - (self.position[1] * scale))
                 self.position = self.local_icu
+                self.canvas.itemconfig(self.shape, fill='pink')
 
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
@@ -146,3 +149,5 @@ class Person:
                                      (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
                 self.canvas.itemconfig(self.shape, fill='grey')
+                if random.random() < death_rate:
+                    self.canvas.delete(self.shape)
