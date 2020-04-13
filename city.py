@@ -6,7 +6,7 @@ from Parameters import *
 class City:
     def __init__(self, canvas, population, pop_density, city_type, city_name):
 
-        self.dim = int(np.ceil(np.sqrt(population / 50)))
+        self.dim = int(np.ceil(np.sqrt(population / 10)))
         w = self.dim * self.dim;
         self.quad = [[0 for x in range(0)] for y in range(w)]
 
@@ -122,12 +122,12 @@ class City:
                 home = [x_home, y_home]
                 position =[x_home, y_home]
                 market = self.market_list[int(random()*self.markets)]
-                quad_i = int(np.ceil(position[1] / self.side_length * (self.dim - 1) * self.dim)) + int(
-                    position[0] / self.side_length * self.side_length)
+                quad_i = int(np.ceil((position[1] % self.side_length) / self.side_length * (self.dim - 1) * self.dim)) + int(
+                    (position[0] % self.side_length) / self.side_length * self.side_length)
                 p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)
                 self.people_list.append([position, p])
-                quad_i = int(np.ceil(position[1] / self.side_length * (self.dim - 1) * self.dim)) + int(position[0] / self.side_length * self.side_length)
-                self.quad[int(np.ceil(position[1] / self.side_length * (self.dim - 1) * self.dim)) + int(position[0] / self.side_length * self.side_length)].append(p)
+
+                self.quad[int(np.ceil((position[1] % self.side_length) / self.side_length * (self.dim - 1) * self.dim)) + int((position[0] % self.side_length) / self.side_length * self.dim)].append(p)
 
 
         # We'll say nobody starts out as immune
@@ -146,10 +146,7 @@ class City:
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
         self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
-        self.patient_zero = int(random() * population)
-        # Set status of patient zero to infected
-        self.people_list[self.patient_zero][1].status = "Infected"
-        self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
+
 
 
     def next_day(self):
@@ -167,7 +164,7 @@ class City:
         # Move all people
         for p in self.people_list:
             p[1].move(new_speed, new_mult)
-            p[1].update_quad()
+            #p[1].update_quad()
 
         # Chance to change status, if status changes, update
         # counts
