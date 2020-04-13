@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 import tkinter
 import time
-t = 0
+t = 1
 
 def n(tk, h):
     time.sleep(t)

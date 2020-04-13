@@ -102,8 +102,45 @@ class Person:
     def change_in_status (self, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
             count = 0
-
+            pos = self.position
             for p in self.quad[self.quad_i]:
+                if p.status == "Infected":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                    if distance <= radius:
+                        count += 1
+                if p.status == "Quarantined":
+                    if p.position == p.local_icu:
+                        distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                        if distance <= radius:
+                            count += 0.01
+                        else:
+                            count += 0.1
+
+            for p in self.quad[self.quad_i+1 % self.dim ** 2]:
+                if p.status == "Infected":
+                    count += 1
+                if p.status == "Quarantined":
+                    if p.position == p.local_icu:
+                        count += 0.01
+                    else:
+                        count += 0.1
+            for p in self.quad[self.quad_i-1 % self.dim ** 2]:
+                if p.status == "Infected":
+                    count += 1
+                if p.status == "Quarantined":
+                    if p.position == p.local_icu:
+                        count += 0.01
+                    else:
+                        count += 0.1
+            for p in self.quad[(self.quad_i+self.dim) % self.dim ** 2]:
+                if p.status == "Infected":
+                    count += 1
+                if p.status == "Quarantined":
+                    if p.position == p.local_icu:
+                        count += 0.01
+                    else:
+                        count += 0.1
+            for p in self.quad[self.quad_i-self.dim]:
                 if p.status == "Infected":
                     count += 1
                 if p.status == "Quarantined":
