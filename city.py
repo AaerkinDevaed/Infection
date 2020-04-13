@@ -1,10 +1,12 @@
 import numpy as np
 from numpy.random import random
 from Person import Person
+from Parameters import *
 
 class City:
-    def __init__(self, population, pop_density, city_type, city_name):
+    def __init__(self, canvas, population, pop_density, city_type, city_name):
 
+        self.canvas = canvas
         # Percent of people still working based on city type
         self.perc_working_dict = {
             "Urban" : .20,
@@ -82,11 +84,13 @@ class City:
         for x in range(self.markets):
             market_position = [random()*self.side_length, random()*self.side_length]
             self.market_list.append(market_position)
+            self.canvas.create_text(market_position[0] * scale + shift, market_position[1] * scale + shift, text="MARKET")
 
         self.icu_list = []
         for x in range(self.icus):
             icu_position = [random()*self.side_length, random()*self.side_length]
             self.icu_list.append(icu_position)
+            self.canvas.create_text(icu_position[0] * scale + shift, icu_position[1] * scale + shift, text="ICU")
 
         # Populate our city with people, houses
         for x in range(self.homes):
@@ -114,7 +118,7 @@ class City:
                 home = [x_home, y_home]
                 position =[x_home, y_home]
                 market = self.market_list[int(random()*self.markets)]
-                p = Person(age, home, status, position, still_working, icu_worker, self.side_length, market, icu)
+                p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu)
                 self.people_list.append([position, p])
 
         # We'll say nobody starts out as immune
@@ -132,6 +136,7 @@ class City:
         self.patient_zero = int(random() * population)
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
+        self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
 
     def next_day(self):
         # Check how many people are infected. A value of
@@ -162,6 +167,7 @@ class City:
                 self.num_icu += 1
             if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
                 self.num_icu -= 1
+        self.change_infected()
 
 
 

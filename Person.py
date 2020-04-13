@@ -7,16 +7,14 @@ Created on %(date)s
 import random
 import math
 import numpy as np
+from Parameters import *
 
 
-radius = .05
-inf_prob = .8
-avg_sicktime = 14
-avg_markettime = 5
-perc_to_icu = 0.03
+
 
 class Person:
-    def __init__(self, age, home, status, position, still_working, icu_worker, edge_size, local_market, local_icu):
+    def __init__(self, canvas, age, home, status, position, still_working, icu_worker, edge_size, local_market, local_icu):
+        self.canvas = canvas
         self.age = age
         self.side_length = edge_size
         self.home = home
@@ -28,24 +26,36 @@ class Person:
         self.icu_worker = icu_worker
         self.time_sick = 0
         self.time_to_last_market = 0
+        self.shape = canvas.create_oval(self.position[0] * scale + shift, self.position[1] * scale + shift,
+                                        self.position[0] * scale + size + shift,
+                                        self.position[1] * scale + size + shift, fill='blue')
 
-    def move(self, avg_speed, work_increase_in_chance):
+    def move(self, speed, work_increase_in_chance):
         if(self.status == "Quarantined"):
             return
 
         if(self.icu_worker == True):
             if self.position == self.local_icu:
                 self.positon = self.home
+                self.canvas.move(self.shape, self.home[0] * scale - self.local_icu[0] * scale,
+                                 (self.home[1] * scale) - (self.local_icu[1] * scale))
             else:
                 self.position == self.local_icu
+                self.canvas.move(self.shape, -1 * self.home[0] * scale + self.local_icu[0] * scale,
+                                 -1 * (self.home[1] * scale) + (self.local_icu[1] * scale))
             return
 
         if(self.position == self.local_market):
             self.position == self.home
+            self.canvas.move(self.shape, -1 * self.local_market[0] * scale + self.home[0] * scale,
+                                 -1 * (self.local_market[1] * scale) + (self.home[1] * scale))
+
             return
 
         if random.random() < self.time_to_last_market / avg_markettime:
             self.position = self.local_market
+            self.canvas.move(self.shape,  * self.local_market[0] * scale - self.home[0] * scale,
+                              (self.local_market[1] * scale) - (self.home[1] * scale))
             return
 
         if(self.time_sick > 8):
@@ -54,18 +64,23 @@ class Person:
         if(self.still_working):
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed * work_increase_in_chance * direc[0]
-            self.position[1] = self.position[1] + avg_speed * work_increase_in_chance * direc[1]
+            self.position[0] = self.position[0] + speed * work_increase_in_chance * direc[0]
+            self.position[1] = self.position[1] + speed * work_increase_in_chance * direc[1]
+            self.canvas.move(self.shape, speed * work_increase_in_chance * direc[0] * scale,
+                             speed * work_increase_in_chance * direc[1] * scale)
 
         else:
             direc = self.direct()
 
-            self.position[0] = self.position[0] + avg_speed * direc[0]
-            self.position[1] = self.position[1] + avg_speed * direc[1]
+            self.position[0] = self.position[0] + speed * direc[0]
+            self.position[1] = self.position[1] + speed * direc[1]
+            self.canvas.move(self.shape, speed * direc[0] * scale,
+                             speed * direc[1] * scale)
 
-        if(self.position[0] > self.side_length or self.position[0] < 0):
+        if (np.sqrt((self.position[0] - self.home[0]) ** 2 + (self.position[1] - self.home[1]) ** 2) > 0.5):
+            self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                             (self.home[1] * scale) - (self.position[1] * scale))
             self.position[0] = self.home[0]
-        if(self.position[1] > self.side_length or self.position[1] < 0):
             self.position[1] = self.home[1]
 
     def direct(self):
@@ -103,20 +118,31 @@ class Person:
                 stay_healthy = .2
             if random.random() > stay_healthy:
                 self.status = "Newly Infected"
+                self.canvas.itemconfig(self.shape, fill='red')
 
         elif self.status == "Infected":
             self.time_sick += 1
             if random.random() < perc_obey * chance_know_sick:
                 self.status = "Quarantined"
+                self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                                 (self.home[1] * scale) - (self.position[1] * scale))
                 self.position = self.home
+                self.canvas.itemconfig(self.shape, fill='yellow')
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
+                self.canvas.itemconfig(self.shape, fill='grey')
 
         elif self.status == "Quarantined":
             self.time_sick += 1
             if random.random() < perc_to_icu:
+                self.canvas.move(self.shape, self.local_icu[0] * scale - self.position[0] * scale,
+                                 (self.local_icu[1] * scale) - (self.position[1] * scale))
                 self.position = self.local_icu
+
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
                 if self.position == self.local_icu:
+                    self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                                     (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
+                self.canvas.itemconfig(self.shape, fill='grey')
