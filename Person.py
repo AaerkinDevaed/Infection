@@ -109,45 +109,71 @@ class Person:
                     if distance <= radius:
                         count += 1
                 if p.status == "Quarantined":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
-                        distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+
                         if distance <= radius:
                             count += 0.01
-                        else:
+                    else:
+                        if distance <= radius:
                             count += 0.1
 
             for p in self.quad[self.quad_i+1 % self.dim ** 2]:
                 if p.status == "Infected":
-                    count += 1
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                    if distance <= radius:
+                        count += 1
                 if p.status == "Quarantined":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
-                        count += 0.01
+
+                        if distance <= radius:
+                            count += 0.01
                     else:
-                        count += 0.1
+                        if distance <= radius:
+                            count += 0.1
             for p in self.quad[self.quad_i-1 % self.dim ** 2]:
                 if p.status == "Infected":
-                    count += 1
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                    if distance <= radius:
+                        count += 1
                 if p.status == "Quarantined":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
-                        count += 0.01
+
+                        if distance <= radius:
+                            count += 0.01
                     else:
-                        count += 0.1
+                        if distance <= radius:
+                            count += 0.1
             for p in self.quad[(self.quad_i+self.dim) % self.dim ** 2]:
                 if p.status == "Infected":
-                    count += 1
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                    if distance <= radius:
+                        count += 1
                 if p.status == "Quarantined":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
-                        count += 0.01
+
+                        if distance <= radius:
+                            count += 0.01
                     else:
-                        count += 0.1
+                        if distance <= radius:
+                            count += 0.1
             for p in self.quad[self.quad_i-self.dim]:
                 if p.status == "Infected":
-                    count += 1
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
+                    if distance <= radius:
+                        count += 1
                 if p.status == "Quarantined":
+                    distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
-                        count += 0.01
+
+                        if distance <= radius:
+                            count += 0.01
                     else:
-                        count += 0.1
+                        if distance <= radius:
+                            count += 0.1
 
             stay_healthy = (1 - inf_prob)**count
             if stay_healthy < .2:
@@ -191,10 +217,10 @@ class Person:
     def update_quad (self):
         if self in self.quad[self.quad_i]:
             self.quad[self.quad_i].remove(self)
-            print(int(np.ceil((self.position[1] + 1) / self.side_length * (self.dim - 1) * self.dim)) + int(
-                (self.position[0] + 1) / self.side_length * self.side_length))
-        self.quad[int(np.ceil(self.position[1] + 1 / self.side_length * (self.dim - 1) * self.dim)) + int(
-            (self.position[0] + 1) / self.side_length * self.side_length)].append(self)
+
+        quad_i = int((np.floor((self.position[1] % self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
+            (self.position[0] % self.side_length) / self.side_length * (self.dim - 1))
+        self.quad[quad_i].append(self)
 
     def change_in_status1 (self, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
