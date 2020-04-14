@@ -136,7 +136,7 @@ class City:
                 self.people_list.append([position, p])
 
                 self.quad[quad_i].append(p)
-                #self.canvas.itemconfig(p.shape, fill = _from_rgb((quad_i*3, quad_i*3, quad_i*3))) - for testing how our grid is spread
+                #self.canvas.itemconfig(p.shape, fill = _from_rgb(((2*quad_i**3)%255, (3*quad_i**3)%255, (5*quad_i**2)%255))) # for testing how our grid is spread
 
 
         # We'll say nobody starts out as immune
