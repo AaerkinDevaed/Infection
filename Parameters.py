@@ -1,8 +1,8 @@
 size = 8
 shift = 0
 scale = 200
-radius = .2
-inf_prob = .8
+radius = .05
+inf_prob = .5
 avg_sicktime = 14
 avg_markettime = 5
 perc_to_icu = 0.03

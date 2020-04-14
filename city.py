@@ -130,12 +130,11 @@ class City:
                 market = self.market_list[int(random()*self.markets)]
                 quad_i = int((np.floor((position[1] % self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
                     (position[0] % self.side_length) / self.side_length * (self.dim-1))
-                print (quad_i)
+
 
                 p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)
                 self.people_list.append([position, p])
-                print(p.position)
-                print(" ")
+
                 self.quad[quad_i].append(p)
                 #self.canvas.itemconfig(p.shape, fill = _from_rgb((quad_i*3, quad_i*3, quad_i*3))) - for testing how our grid is spread
 
@@ -174,7 +173,7 @@ class City:
         # Move all people
         for p in self.people_list:
             p[1].move(new_speed, new_mult)
-            #p[1].update_quad()
+            p[1].update_quad()
 
         # Chance to change status, if status changes, update
         # counts
