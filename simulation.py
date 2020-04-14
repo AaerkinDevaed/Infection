@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 import tkinter
 import time
-t = 0
+t = 10
 
 def n(tk, h):
     time.sleep(t)
@@ -23,7 +23,7 @@ def main():
     tk = tkinter.Tk()
     canvas = tkinter.Canvas(tk, width=1920, height=1040, bg="white")
     canvas.pack()
-    houston = City(canvas, 5000, 1000, "Urban", "Houston")
+    houston = City(canvas, 10000, 1000, "Urban", "Houston")
     tk.update()
 
     n(tk, houston)
