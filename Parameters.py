@@ -1,5 +1,5 @@
 size = 8
-shift = 100
+shift = 0
 scale = 200
 radius = .2
 inf_prob = .8
