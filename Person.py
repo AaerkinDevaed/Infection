@@ -14,6 +14,7 @@ from Parameters import *
 
 class Person:
     def __init__(self, city, canvas, age, home, status, position, still_working, icu_worker, edge_size, local_market, local_icu, quad, quad_i, dim):
+
         self.city = city
         self.inter=0
         self.dim = dim
@@ -120,6 +121,16 @@ class Person:
         self.position[0] = self.home[0]
         self.position[1] = self.home[1]
         return
+    def swap_change(self, new_info):
+        self.age = new_info[0]
+        old = self.status
+        self.status = new_info[1]
+        if old != self.status and (self.status == "Infected" or self.status == "Newly Infected"):
+            self.canvas.itemconfig(self.shape, fill='red')
+        elif old != self.status and (self.status == "Immune"):
+            self.canvas.itemconfig(self.shape, fill='grey')
+        else:
+            self.canvas.itemconfig(self.shape, fill='blue')
 
     def change_in_status (self, parent, people_list, chance_know_sick, perc_obey):
         if(self.inter!=0):
