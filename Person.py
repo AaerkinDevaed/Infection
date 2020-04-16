@@ -13,7 +13,9 @@ from Parameters import *
 
 
 class Person:
-    def __init__(self, canvas, age, home, status, position, still_working, icu_worker, edge_size, local_market, local_icu, quad, quad_i, dim):
+    def __init__(self, city, canvas, age, home, status, position, still_working, icu_worker, edge_size, local_market, local_icu, quad, quad_i, dim):
+        self.city = city
+        self.inter=0
         self.dim = dim
         self.quad = quad
         self.quad_i = quad_i
@@ -33,7 +35,21 @@ class Person:
                                         self.position[0] * scale + size + shift,
                                         self.position[1] * scale + size + shift, fill='blue')
 
+    def move_inter(self, speed, target):
+        self.position[0] = self.position[0] + (target.city_loc[0] - self.position[0]) / (city_travel_time - self.inter)
+        self.position[1] = self.position[1] + (target.city_loc[1] - self.position[1]) / (city_travel_time - self.inter)
+        self.canvas.move(self.shape, (target.city_loc[0] - self.position[0]) / (city_travel_time - self.inter) * scale,
+                         (target.city_loc[1] - self.position[1]) / (city_travel_time - self.inter) * scale)
+        self.inter += 1
+        if(self.inter==city_travel_time):
+            self.inter == 0
+            self.city.travel_complete(self)            # he'll reset home next time by himself, no need to send home
+        return
+
     def move(self, speed, work_increase_in_chance):
+        if(self.inter!=0):
+            self.move_inter(speed, self.target)
+            return
         if(self.status == "Quarantined"):
             return
 
@@ -98,17 +114,25 @@ class Person:
         sp[1] = sp[1] / (norm)
 
         return sp
+    def go_back(self):
+        self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                         (self.home[1] * scale) - (self.position[1] * scale))
+        self.position[0] = self.home[0]
+        self.position[1] = self.home[1]
+        return
 
     def change_in_status (self, people_list, chance_know_sick, perc_obey):
+        if(self.inter!=0):
+            return
         if self.status == "Healthy":
             count = 0
             pos = self.position
             for p in self.quad[self.quad_i]:
                 if p.status == "Infected":
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
-                    if distance <= radius:
+                    if distance <= radius and p.inter==0:
                         count += 1
-                if p.status == "Quarantined":
+                if p.status == "Quarantined" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
 
@@ -119,11 +143,11 @@ class Person:
                             count += 0.1
 
             for p in self.quad[self.quad_i+1 % self.dim ** 2]:
-                if p.status == "Infected":
+                if p.status == "Infected" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if distance <= radius:
                         count += 1
-                if p.status == "Quarantined":
+                if p.status == "Quarantined" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
 
@@ -133,11 +157,11 @@ class Person:
                         if distance <= radius:
                             count += 0.1
             for p in self.quad[self.quad_i-1 % self.dim ** 2]:
-                if p.status == "Infected":
+                if p.status == "Infected" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if distance <= radius:
                         count += 1
-                if p.status == "Quarantined":
+                if p.status == "Quarantined" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
 
@@ -147,11 +171,11 @@ class Person:
                         if distance <= radius:
                             count += 0.1
             for p in self.quad[(self.quad_i+self.dim) % self.dim ** 2]:
-                if p.status == "Infected":
+                if p.status == "Infected" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if distance <= radius:
                         count += 1
-                if p.status == "Quarantined":
+                if p.status == "Quarantined" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
 
@@ -161,11 +185,11 @@ class Person:
                         if distance <= radius:
                             count += 0.1
             for p in self.quad[self.quad_i-self.dim]:
-                if p.status == "Infected":
+                if p.status == "Infected" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if distance <= radius:
                         count += 1
-                if p.status == "Quarantined":
+                if p.status == "Quarantined" and p.inter==0:
                     distance = math.sqrt((p.position[0] - pos[0]) ** 2 + (p.position[1] - pos[1]) ** 2)
                     if p.position == p.local_icu:
 
@@ -215,6 +239,8 @@ class Person:
                     self.canvas.delete(self.shape)
 
     def update_quad (self):
+        if (self.inter!=0):
+            return
         if self in self.quad[self.quad_i]:
             self.quad[self.quad_i].remove(self)
 

@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.random import random
+from random import *
 from Person import Person
 from Parameters import *
 
@@ -11,6 +12,8 @@ def _from_rgb(rgb):
 class City:
     def __init__(self, canvas, population, pop_density, city_type, city_name, city_loc):
 
+        self.city_loc = city_loc
+        self.neighbors=[]
         self.dim = int(np.ceil(np.sqrt(population / 10)))
         w = self.dim * self.dim;
         self.quad = [[0 for x in range(0)] for y in range(w)]
@@ -132,7 +135,7 @@ class City:
                     ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim-1))
 
 
-                p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)
+                p = Person(self, self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)
                 self.people_list.append([position, p])
 
                 self.quad[quad_i].append(p)
@@ -155,10 +158,28 @@ class City:
         # Set status of patient zero to infected
         self.people_list[self.patient_zero][1].status = "Infected"
         self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
+    def set_neighbors(self, neighbors):
+        self.neighbors = neighbors
 
+    def travel_complete(self, p):
+        target = p.target
+        temp = True
+        while (temp == True):
+            swappee = choice(self.people_list)[1]
+            temp = swappee.still_working
+
+        temp = swappee.status           #a simple way for the new person to "become a resident is to swap status, age, etc. with a similar resident of target city
+        swappee.status = p.status
+        p.status = temp
+        temp = swappee.age
+        swappee.age = p.age
+        p.age = temp
+        p.go_back()
+        return
 
 
     def next_day(self):
+
         # Check how many people are infected. A value of
         # 1 corresponds to .1% of population, 2 to .2%, etc
         perc_inf_adj = int((float(self.num_infected) / self.population) / .01)
@@ -169,6 +190,15 @@ class City:
             new_speed, new_mult = self.social_distancing_policies[4]
         else:
             new_speed, new_mult = self.social_distancing_policies[perc_inf_adj]
+
+        target = choice(self.neighbors)
+        temp = True
+        while (temp == True):    #going to assume working people (and therefore icu workers) don't travel
+            traveler = choice(self.people_list)[1]
+            temp = traveler.still_working
+
+        traveler.target = target
+        traveler.inter = 1
 
         # Move all people
         for p in self.people_list:

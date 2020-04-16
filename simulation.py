@@ -7,7 +7,7 @@ import tkinter
 import time
 from Parameters import *
 t = 0
-cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (5000, 400, "Semi-Urban", "Conyers", [3.5,3.5]), (500, 70, "Rural", "Covington", [6,0])]
+cities = [(1000, 1000, "Urban", "Atlanta", [0,0]), (500, 400, "Semi-Urban", "Conyers", [5,5]), (707, 700, "Rural", "Covington", [7,1])]
 
 def n(tk, city_list):
     time.sleep(t)
@@ -31,10 +31,15 @@ def main():
         city_type = city[2]
         city_name = city[3]
         city_loc = city[4]
+        neighbors = [i for i in cities if i!=city]
         city = City(canvas, population, pop_density, city_type, city_name, city_loc)
         city_list.append(city)
         canvas.create_text((city_loc[0]+city.side_length/2) * scale + shift, (city_loc[1]+city.side_length + 0.5) * scale + shift, text=city_name,
                                 font=("Purisa", 45), fill="Black")
+    for city in city_list:
+        neighbors = [i for i in city_list if i != city]
+        city.set_neighbors(neighbors)
+
     tk.update()
 
     n(tk, city_list)
