@@ -194,6 +194,7 @@ class Person:
                 self.status = "Immune"
                 self.canvas.itemconfig(self.shape, fill='grey')
                 if random.random() < death_rate:
+                    parent.num_dead += 1
                     self.canvas.delete(self.shape)
 
         elif self.status == "Quarantined":
@@ -212,6 +213,7 @@ class Person:
                     self.position = self.home
                 self.canvas.itemconfig(self.shape, fill='grey')
                 if random.random() < death_rate:
+                    parent.num_dead += 1
                     self.canvas.delete(self.shape)
 
     def update_quad (self):
@@ -222,58 +224,3 @@ class Person:
             (self.position[0] % self.side_length) / self.side_length * (self.dim - 1))
         self.quad[quad_i].append(self)
 
-    def change_in_status1 (self, people_list, chance_know_sick, perc_obey):
-        if self.status == "Healthy":
-            count = 0
-            pos = self.position
-            for i in people_list:
-                if i[1].status == "Infected":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
-                    if distance <= radius:
-                        count += 1
-                if i[1].status == "Quarantined":
-                    distance = math.sqrt((i[0][0] - pos[0])**2 + (i[0][1] - pos[1])**2)
-                    if distance <= radius:
-                        if i[1].position == i[1].local_icu:
-                            count += 0.01
-                        else:
-                            count += 0.1
-
-            stay_healthy = (1 - inf_prob)**count
-            if stay_healthy < .2:
-                stay_healthy = .2
-            if random.random() > stay_healthy:
-                self.status = "Newly Infected"
-                self.canvas.itemconfig(self.shape, fill='red')
-
-        elif self.status == "Infected":
-            self.time_sick += 1
-            if random.random() < perc_obey * chance_know_sick:
-                self.status = "Quarantined"
-                self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
-                                 (self.home[1] * scale) - (self.position[1] * scale))
-                self.position = self.home
-                self.canvas.itemconfig(self.shape, fill='yellow')
-            if random.random() < self.time_sick / avg_sicktime:
-                self.status = "Immune"
-                self.canvas.itemconfig(self.shape, fill='grey')
-                if random.random() < death_rate:
-                    self.canvas.delete(self.shape)
-
-        elif self.status == "Quarantined":
-            self.time_sick += 1
-            if random.random() < perc_to_icu:
-                self.canvas.move(self.shape, self.local_icu[0] * scale - self.position[0] * scale,
-                                 (self.local_icu[1] * scale) - (self.position[1] * scale))
-                self.position = self.local_icu
-                self.canvas.itemconfig(self.shape, fill='pink')
-
-            if random.random() < self.time_sick / avg_sicktime:
-                self.status = "Immune"
-                if self.position == self.local_icu:
-                    self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
-                                     (self.home[1] * scale) - (self.position[1] * scale))
-                    self.position = self.home
-                self.canvas.itemconfig(self.shape, fill='grey')
-                if random.random() < death_rate:
-                    self.canvas.delete(self.shape)

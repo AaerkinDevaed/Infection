@@ -174,7 +174,7 @@ class City:
 
         # Move all people
         for p in self.people_list:
-            p[1].move(self, new_speed, new_mult)
+            p[1].move(new_speed, new_mult)
             p[1].update_quad()
 
         # Chance to change status, if status changes, update
@@ -183,7 +183,7 @@ class City:
             person = p[1]
             before = person.status
             before_position = person.position
-            person.change_in_status(self.people_list, self.chance_know_sick, self.perc_obey)
+            person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey)
             if(before != person.status):
                 self.adjust(before, person.status)
             if person.status == "Quarantined" and person.position == person.local_icu:
