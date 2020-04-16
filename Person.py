@@ -97,6 +97,8 @@ class Person:
                             count += 0.01
                         else:
                             count += 0.1
+            if(count != 0):
+                print(count)
 
             stay_healthy = (1 - inf_prob)**count
             if stay_healthy < .2:
@@ -105,8 +107,6 @@ class Person:
                 self.status = "Newly Infected"
 
         elif self.status == "Infected":
-            print(self.position)
-            self.time_sick += 1
             if random.random() < perc_obey * chance_know_sick:
                 self.status = "Quarantined"
                 self.position = self.home
