@@ -99,7 +99,7 @@ class Person:
 
         return sp
 
-    def change_in_status (self, people_list, chance_know_sick, perc_obey):
+    def change_in_status (self, parent, people_list, chance_know_sick, perc_obey):
         if self.status == "Healthy":
             count = 0
             pos = self.position
