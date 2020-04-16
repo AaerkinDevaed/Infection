@@ -1,6 +1,6 @@
 size = 8
 shift = 0
-scale = 200
+scale = 100
 radius = .05
 inf_prob = .5
 avg_sicktime = 14

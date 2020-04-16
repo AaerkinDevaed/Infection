@@ -9,7 +9,7 @@ def _from_rgb(rgb):
     return "#%02x%02x%02x" % rgb
 
 class City:
-    def __init__(self, canvas, population, pop_density, city_type, city_name):
+    def __init__(self, canvas, population, pop_density, city_type, city_name, city_loc):
 
         self.dim = int(np.ceil(np.sqrt(population / 10)))
         w = self.dim * self.dim;
@@ -91,21 +91,21 @@ class City:
         # Populate our city with markets
         self.market_list = []
         for x in range(self.markets):
-            market_position = [random()*self.side_length, random()*self.side_length]
+            market_position = [random()*self.side_length + city_loc[0], random()*self.side_length + city_loc[1]]
             self.market_list.append(market_position)
-            self.canvas.create_text(market_position[0] * scale + shift, market_position[1] * scale + shift, text="MARKET", font=("Purisa", 20), fill="Green")
+            self.canvas.create_text((market_position[0]) * scale + shift, (market_position[1] ) * scale + shift, text="MARKET", font=("Purisa", 20), fill="Green")
 
         self.icu_list = []
         for x in range(self.icus):
-            icu_position = [random()*self.side_length, random()*self.side_length]
+            icu_position = [random()*self.side_length + city_loc[0], random()*self.side_length + city_loc[1]]
             self.icu_list.append(icu_position)
-            self.canvas.create_text(icu_position[0] * scale + shift, icu_position[1] * scale + shift, text="ICU", font=("Purisa", 20), fill="Purple")
+            self.canvas.create_text((icu_position[0]) * scale + shift, (icu_position[1]) * scale + shift, text="ICU", font=("Purisa", 20), fill="Purple")
 
         # Populate our city with people, houses
         for x in range(self.homes):
             # Randomly generate x and y coordinates of homes
-            x_home = random()*self.side_length
-            y_home = random()*self.side_length
+            x_home = random()*self.side_length + city_loc[0]
+            y_home = random()*self.side_length + city_loc[1]
 
             # Put 5 people in each house
             for p in range(5):
@@ -128,8 +128,8 @@ class City:
                 position =[x_home, y_home]
 
                 market = self.market_list[int(random()*self.markets)]
-                quad_i = int((np.floor((position[1] % self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
-                    (position[0] % self.side_length) / self.side_length * (self.dim-1))
+                quad_i = int((np.floor(((position[1] + city_loc[0])% self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
+                    ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim-1))
 
 
                 p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)

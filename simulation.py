@@ -5,10 +5,12 @@ import random
 import matplotlib.pyplot as plt
 import tkinter
 import time
-t = 10
-cities = [(10000, 1000, "Urban", "Atlanta"), (5000, 400, "Semi-Urban", "Conyers"), (500, 10, "Rural", "Covington")]
+from Parameters import *
+
 city_data = {}
 total_data = {"Totals" : [[],[],[],[],[],[]]}
+t = 0
+cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (5000, 400, "Semi-Urban", "Conyers", [3.5,3.5]), (500, 70, "Rural", "Covington", [6,0])]
 
 def n(tk, city_list):
     time.sleep(t)
@@ -40,10 +42,13 @@ def main():
         pop_density = city[1]
         city_type = city[2]
         city_name = city[3]
-        city = City(canvas, population, pop_density, city_type, city_name)
-        city_list.append(city)
+        city_loc = city[4]
+        city = City(canvas, population, pop_density, city_type, city_name, city_loc)
         per_city_data = [[city.num_immune],[city.num_healthy],[city.num_infected],[city.num_quarantined],[city.num_icu],[city.num_dead]]
         city_data[city_name] = per_city_data
+        city_list.append(city)
+        canvas.create_text((city_loc[0]+city.side_length/2) * scale + shift, (city_loc[1]+city.side_length + 0.5) * scale + shift, text=city_name,
+                                font=("Purisa", 45), fill="Black")
     tk.update()
 
     n(tk, city_list)
