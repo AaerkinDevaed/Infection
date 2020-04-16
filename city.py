@@ -150,6 +150,8 @@ class City:
         self.num_quarantined = 0
         # Set number of people in ICU to 0
         self.num_icu = 0
+        # Set number of dead people to 0
+        self.num_dead = 0
         # Select the lucky patient zero randomly
         self.patient_zero = int(random() * population)
         # Set status of patient zero to infected
@@ -172,7 +174,7 @@ class City:
 
         # Move all people
         for p in self.people_list:
-            p[1].move(new_speed, new_mult)
+            p[1].move(self, new_speed, new_mult)
             p[1].update_quad()
 
         # Chance to change status, if status changes, update
