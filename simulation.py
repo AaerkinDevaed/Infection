@@ -7,6 +7,7 @@ import atexit
 matplotlib.use('tkagg')
 import matplotlib.pyplot as plt
 import tkinter
+import sys
 import time
 from Parameters import *
 
@@ -38,7 +39,7 @@ def n(tk, city_list):
     count = 0
     for city in city_list:
         if count == len(city_list):
-            return
+            sys.exit(0)
         if city.num_infected == 0:
             count += 1
         else:
