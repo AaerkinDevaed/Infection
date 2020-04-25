@@ -227,7 +227,7 @@ class Person:
                     if random.random() < death_rate*2:
                         parent.num_dead += 1
                         self.canvas.delete(self.shape)
-                    elif random.random() < death_rate/2:
+                    elif random.random() < death_rate:
                         self.canvas.delete(self.shape)
                         parent.num_dead += 1
 
@@ -238,4 +238,3 @@ class Person:
         quad_i = int((np.floor((self.position[1] % self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
             (self.position[0] % self.side_length) / self.side_length * (self.dim - 1))
         self.quad[quad_i].append(self)
-
