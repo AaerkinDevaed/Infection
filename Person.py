@@ -190,12 +190,23 @@ class Person:
                                  (self.home[1] * scale) - (self.position[1] * scale))
                 self.position = self.home
                 self.canvas.itemconfig(self.shape, fill='yellow')
+            if random.random() < perc_to_icu:
+                self.canvas.move(self.shape, self.local_icu[0] * scale - self.position[0] * scale,
+                                 (self.local_icu[1] * scale) - (self.position[1] * scale))
+                self.position = self.local_icu
+                self.canvas.itemconfig(self.shape, fill='pink')
+                self.status = "Quarantined"
             if random.random() < self.time_sick / avg_sicktime:
                 self.status = "Immune"
                 self.canvas.itemconfig(self.shape, fill='grey')
+                if self.position == self.local_icu:
+                    self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                                     (self.home[1] * scale) - (self.position[1] * scale))
+                    self.position = self.home
                 if random.random() < death_rate:
                     parent.num_dead += 1
                     self.canvas.delete(self.shape)
+
 
         elif self.status == "Quarantined":
             self.time_sick += 1
@@ -212,9 +223,13 @@ class Person:
                                      (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
                 self.canvas.itemconfig(self.shape, fill='grey')
-                if random.random() < death_rate:
-                    parent.num_dead += 1
-                    self.canvas.delete(self.shape)
+                if(self.position == self.local_icu):
+                    if random.random() < death_rate*2:
+                        parent.num_dead += 1
+                        self.canvas.delete(self.shape)
+                    elif random.random() < death_rate/2:
+                        self.canvas.delete(self.shape)
+                        parent.num_dead += 1
 
     def update_quad (self):
         if self in self.quad[self.quad_i]:
