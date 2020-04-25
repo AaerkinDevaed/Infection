@@ -18,8 +18,6 @@ fig, axs = plt.subplots(2,2)
 time_list = [0]
 
 def n(tk, city_list):
-    if len(time_list) > 20:
-        return
     time.sleep(t)
     next_day = time_list[-1] + 1
     for tracked_list in total_data["Totals"]:
@@ -37,9 +35,14 @@ def n(tk, city_list):
             tracked_list[next_day] += city_data[city.city_name][i][next_day]
     tk.update()
     time_list.append(next_day)
+    count = 0
     for city in city_list:
-        if city.num_immune == city.population:
+        if count == len(city_list):
             return
+        if city.num_infected == 0:
+            count += 1
+        else:
+            break
     tk.after(t,  n(tk, city_list))
 
 def main():
@@ -68,24 +71,23 @@ def main():
     n(tk, city_list)
 
 def graph():
+    for i, list_tracker in enumerate(total_data['Totals']):
+        total_data['Totals'][i] = list_tracker[:-1]
     for i, (city, data) in enumerate(dict(city_data, **total_data).items()):
-        try:
-            row = int(i / 2)
-            col = i % 2
-            current_graph = axs[row][col]
-            current_graph.clear()
-            current_graph.plot(time_list, data[0], color = "green", label = "Immune")
-            current_graph.plot(time_list, data[1], color = "blue", label = "Healthy")
-            current_graph.plot(time_list, data[2], color = "red", label = "Infected")
-            current_graph.plot(time_list, data[3], color = "yellow", label = "Quarantined")
-            current_graph.plot(time_list, data[4], color = "pink", label = "ICU")
-            current_graph.plot(time_list, data[5], color = "black", label = "Dead")
-            current_graph.legend()
-            current_graph.set_title(city)
-            current_graph.set_xlabel("# of Days")
-            current_graph.set_ylabel("# of People")
-        except:
-            continue
+        row = int(i / 2)
+        col = i % 2
+        current_graph = axs[row][col]
+        current_graph.clear()
+        current_graph.plot(time_list, data[0], color = "green", label = "Immune")
+        current_graph.plot(time_list, data[1], color = "blue", label = "Healthy")
+        current_graph.plot(time_list, data[2], color = "red", label = "Infected")
+        current_graph.plot(time_list, data[3], color = "yellow", label = "Quarantined")
+        current_graph.plot(time_list, data[4], color = "pink", label = "ICU")
+        current_graph.plot(time_list, data[5], color = "black", label = "Dead")
+        current_graph.legend()
+        current_graph.set_title(city)
+        current_graph.set_xlabel("# of Days")
+        current_graph.set_ylabel("# of People")
     plt.tight_layout()
     plt.show()
 

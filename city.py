@@ -143,20 +143,26 @@ class City:
         self.num_immune = 0
         # Number of healthy is population - 1, since one person
         # is going to be infected
-        self.num_healthy = len(self.people_list) - 1
+        self.num_healthy = len(self.people_list) - 3
         # Set number of infected to one
-        self.num_infected = 1
+        self.num_infected = 3
         # Set number of quarantined people to 0
         self.num_quarantined = 0
         # Set number of people in ICU to 0
         self.num_icu = 0
         # Set number of dead people to 0
         self.num_dead = 0
-        # Select the lucky patient zero randomly
-        self.patient_zero = int(random() * population)
-        # Set status of patient zero to infected
-        self.people_list[self.patient_zero][1].status = "Infected"
-        self.canvas.itemconfig(self.people_list[self.patient_zero][1].shape, fill='red')
+        self.patient_zeros = []
+        # Select the lucky patient zeros randomly
+        while(len(set(self.patient_zeros)) != 3): # we check len(set()) because
+                                                # it's possible that we choose the same person
+                                                # multiple times.
+            self.patient_zeros.append(int(random()*population))
+            self.patient_zeros = list(set(self.patient_zeros)) # Remove duplicates if we add one
+        # Set status of patient zeros to infected, change their color to red
+        for patient in self.patient_zeros:
+            self.people_list[patient][1].status = "Infected"
+            self.canvas.itemconfig(self.people_list[patient][1].shape, fill='red')
 
 
 
