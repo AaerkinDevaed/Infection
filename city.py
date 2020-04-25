@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.random import random
+import random as randomg
 from Person import Person
 from Parameters import *
 
@@ -82,7 +83,6 @@ class City:
         self.population = population - population % 5
         self.pop_density = pop_density
         self.area = float(population) / pop_density
-        self.homes = int(population / 5)
         self.markets = int(population / 500)
         self.icus = int(population / 500)
         self.people_list = []
@@ -102,13 +102,16 @@ class City:
             self.canvas.create_text((icu_position[0]) * scale + shift, (icu_position[1]) * scale + shift, text="ICU", font=("Purisa", 20), fill="Purple")
 
         # Populate our city with people, houses
-        for x in range(self.homes):
+        current_pop = 0
+        while(current_pop < self.population):
             # Randomly generate x and y coordinates of homes
             x_home = random()*self.side_length + city_loc[0]
             y_home = random()*self.side_length + city_loc[1]
 
-            # Put 5 people in each house
-            for p in range(5):
+            # Put up to 5 people in each house
+            people_in_house = max(int(randomg.gauss(3,1))+1, 1)
+            current_pop += people_in_house
+            for p in range(people_in_house):
                 # Randoma age
                 age = random() * self.life_expectancy
                 # Start out as healthy
