@@ -48,11 +48,11 @@ class City:
         # Social Distancing Policies based on city-type and infection level
         if(city_type == "Urban"):
             self.social_distancing_policies = {
-            0 : [.15, 1],
-            1 : [.08, (.15/.08)],
-            2 : [.03, 5],
-            3 : [.02, (.15/.02)],
-            4 : [.01, 15]
+            0 : [.15 , 1 ],
+            1 : [0.15 - .07 * strength, 0.15 / (0.15 - .07 * strength)],
+            2 : [0.15 - .03 * strength, 0.15 / (0.15 - .03 * strength)],
+            3 : [0.15 - .02 * strength, 0.15 / (0.15 - .02 * strength)],
+            4 : [0.15 - .01 * strength, 0.15 / (0.15 - .01 * strength)]
         }
         elif(city_type == "Semi-Urban"):
             self.social_distancing_policies = {
