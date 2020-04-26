@@ -11,12 +11,14 @@ def _from_rgb(rgb):
 
 class City:
     def __init__(self, canvas, population, pop_density, city_type, city_name, city_loc):
+        # Method for initializing and constructing our city object
 
         self.dim = int(np.ceil(np.sqrt(population / 10)))
         w = self.dim * self.dim;
         self.quad = [[0 for x in range(0)] for y in range(w)]
 
         self.canvas = canvas
+
         # Percent of people still working based on city type
         self.perc_working_dict = {
             "Urban" : .20,
@@ -24,21 +26,21 @@ class City:
             "Rural" : .05
         }
         # Life Expectancy based on city-type.
-        # This makes almost no difference sorry for including.
+        # This makes almost no difference, but more accuracy doesn't hurt.
         self.life_expectancy_dict = {
             "Urban" : 79.1,
             "Semi-Urban": 76.9,
             "Rural": 76.7
         }
-        # Percent of people who know they are sick
+        # Percent of people who find out they are sick each day
         # (efficiency of testing, basically)
         self.testing_efficieny_dict = {
             "Urban" : .3,
             "Semi-Urban" : .2,
             "Rural" : .1
         }
-        # Percent of people who know they are sick
-        # and so quarantine themselves
+        # Percent of people who quarantine themselves
+        # once they find out that they are sick.
         self.testing_obey_dict = {
             "Urban" : .85,
             "Semi-Urban" : .7,
@@ -48,27 +50,27 @@ class City:
         # Social Distancing Policies based on city-type and infection level
         if(city_type == "Urban"):
             self.social_distancing_policies = {
-            0 : [.15 , 1 ],
-            1 : [0.15 - .07 * strength, 0.15 / (0.15 - .07 * strength)],
-            2 : [0.15 - .03 * strength, 0.15 / (0.15 - .03 * strength)],
-            3 : [0.15 - .02 * strength, 0.15 / (0.15 - .02 * strength)],
-            4 : [0.15 - .01 * strength, 0.15 / (0.15 - .01 * strength)]
+            0 : .15,
+            1 : 0.15 - .08 * strength,
+            2 : 0.15 - .12 * strength,
+            3 : 0.15 - .13 * strength,
+            4 : 0.15 - .14 * strength,
         }
         elif(city_type == "Semi-Urban"):
             self.social_distancing_policies = {
-            0 : [.20, 1],
-            1 : [.11, .2/.11],
-            2 : [.05, 4],
-            3 : [.02, 10],
-            4 : [.01, 20]
+            0 : .20,
+            1 : .20 - .09 * strength,
+            2 : .20 - .15 * strength,
+            3 : .20 - .18 * strength,
+            4 : .20 - .19 * strength,
         }
         elif(city_type == "Rural"):
             self.social_distancing_policies = {
-            0 : [.50, 1],
-            1 : [.26, .5/.26],
-            2 : [.125, 4],
-            3 : [.07, .5/.07],
-            4 : [.05, 10]
+            0 : .50,
+            1 : .50 - .24 * strength,
+            2 : .50 - .375 * strength,
+            3 : .50 - .43 * strength,
+            4 : .50 - .45 * strength,
         }
         # use dicts to assign values depending on city type.
         # Probably could have used a factory constructor to make this
@@ -139,7 +141,7 @@ class City:
                 self.people_list.append([position, p])
 
                 self.quad[quad_i].append(p)
-                self.canvas.itemconfig(p.shape, fill = _from_rgb(((2*quad_i**3)%255, (3*quad_i**3)%255, (5*quad_i**2)%255))) # for testing how our grid is spread
+                # self.canvas.itemconfig(p.shape, fill = _from_rgb(((2*quad_i**3)%255, (3*quad_i**3)%255, (5*quad_i**2)%255))) # for testing how our grid is spread
 
 
         # We'll say nobody starts out as immune
@@ -177,9 +179,10 @@ class City:
         # If more than .4% of the population is infected, full
         # social distancing policies are in place.
         if(perc_inf_adj > 4):
-            new_speed, new_mult = self.social_distancing_policies[4]
+            new_speed = self.social_distancing_policies[4]
         else:
-            new_speed, new_mult = self.social_distancing_policies[perc_inf_adj]
+            new_speed = self.social_distancing_policies[perc_inf_adj]
+        new_mult = self.social_distancing_policies[0] / new_speed
 
         # Move all people
         for p in self.people_list:
@@ -198,7 +201,6 @@ class City:
             if person.status == "Quarantined" and person.position == person.local_icu and before_position != person.position:
                 self.num_icu += 1
             if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
-                
                 self.num_icu -= 1
         self.change_infected()
 
