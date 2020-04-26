@@ -4,10 +4,12 @@ import random as randomg
 from Person import Person
 from Parameters import *
 
+
 def _from_rgb(rgb):
     """translates an rgb tuple of int to a tkinter friendly color code
     """
     return "#%02x%02x%02x" % rgb
+
 
 class City:
     def __init__(self, canvas, population, pop_density, city_type, city_name, city_loc):
@@ -21,34 +23,34 @@ class City:
 
         # Percent of people still working based on city type
         self.perc_working_dict = {
-            "Urban" : .20,
-            "Semi-Urban" : .10,
-            "Rural" : .05
+            "Urban": .20,
+            "Semi-Urban": .10,
+            "Rural": .05
         }
         # Life Expectancy based on city-type.
         # This makes almost no difference, but more accuracy doesn't hurt.
         self.life_expectancy_dict = {
-            "Urban" : 79.1,
+            "Urban": 79.1,
             "Semi-Urban": 76.9,
             "Rural": 76.7
         }
         # Percent of people who find out they are sick each day
         # (efficiency of testing, basically)
         self.testing_efficieny_dict = {
-            "Urban" : .3,
-            "Semi-Urban" : .2,
-            "Rural" : .1
+            "Urban": .3,
+            "Semi-Urban": .2,
+            "Rural": .1
         }
         # Percent of people who quarantine themselves
         # once they find out that they are sick.
         self.testing_obey_dict = {
-            "Urban" : .85,
-            "Semi-Urban" : .7,
-            "Rural" : .4
+            "Urban": .85,
+            "Semi-Urban": .7,
+            "Rural": .4
         }
 
         # Social Distancing Policies based on city-type and infection level
-        if(city_type == "Urban"):
+        if city_type == "Urban":
             self.social_distancing_policies = {
             0 : .15,
             1 : 0.15 - .08 * strength,
@@ -56,7 +58,7 @@ class City:
             3 : 0.15 - .13 * strength,
             4 : 0.15 - .14 * strength,
         }
-        elif(city_type == "Semi-Urban"):
+        elif city_type == "Semi-Urban":
             self.social_distancing_policies = {
             0 : .20,
             1 : .20 - .09 * strength,
@@ -64,7 +66,7 @@ class City:
             3 : .20 - .18 * strength,
             4 : .20 - .19 * strength,
         }
-        elif(city_type == "Rural"):
+        elif city_type == "Rural":
             self.social_distancing_policies = {
             0 : .50,
             1 : .50 - .24 * strength,
@@ -93,25 +95,27 @@ class City:
         # Populate our city with markets
         self.market_list = []
         for x in range(self.markets):
-            market_position = [random()*self.side_length + city_loc[0], random()*self.side_length + city_loc[1]]
+            market_position = [random() * self.side_length + city_loc[0], random() * self.side_length + city_loc[1]]
             self.market_list.append(market_position)
-            self.canvas.create_text((market_position[0]) * scale + shift, (market_position[1] ) * scale + shift, text="MARKET", font=("Purisa", 20), fill="Green")
+            self.canvas.create_text((market_position[0]) * scale + shift, (market_position[1]) * scale + shift,
+                                    text="MARKET", font=("Purisa", 20), fill="Green")
 
         self.icu_list = []
         for x in range(self.icus):
-            icu_position = [random()*self.side_length + city_loc[0], random()*self.side_length + city_loc[1]]
+            icu_position = [random() * self.side_length + city_loc[0], random() * self.side_length + city_loc[1]]
             self.icu_list.append(icu_position)
-            self.canvas.create_text((icu_position[0]) * scale + shift, (icu_position[1]) * scale + shift, text="ICU", font=("Purisa", 20), fill="Purple")
+            self.canvas.create_text((icu_position[0]) * scale + shift, (icu_position[1]) * scale + shift, text="ICU",
+                                    font=("Purisa", 20), fill="Purple")
 
         # Populate our city with people, houses
         current_pop = 0
-        while(current_pop < self.population):
+        while (current_pop < self.population):
             # Randomly generate x and y coordinates of homes
-            x_home = random()*self.side_length + city_loc[0]
-            y_home = random()*self.side_length + city_loc[1]
+            x_home = random() * self.side_length + city_loc[0]
+            y_home = random() * self.side_length + city_loc[1]
 
             # Put up to 5 people in each house
-            people_in_house = max(int(randomg.gauss(3,1))+1, 1)
+            people_in_house = max(int(randomg.gauss(3, 1)) + 1, 1)
             current_pop += people_in_house
             for p in range(people_in_house):
                 # Randoma age
@@ -122,27 +126,27 @@ class City:
                 # distancing policies are put in place)
                 still_working = False
                 icu_worker = False
-                icu = self.icu_list[int(random()*self.icus)]
+                icu = self.icu_list[int(random() * self.icus)]
                 # We'll say perc_working of people age 20-60
                 # still work out of house
-                if(20 < age < 60 and random() < self.perc_working):
+                if (20 < age < 60 and random() < self.perc_working):
                     still_working = True
                     if (random() < 0.1):
                         icu_worker = True
                 home = [x_home, y_home]
-                position =[x_home, y_home]
+                position = [x_home, y_home]
 
-                market = self.market_list[int(random()*self.markets)]
-                quad_i = int((np.floor(((position[1] + city_loc[0])% self.side_length) / self.side_length * (self.dim - 1)) * self.dim)) + int(
-                    ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim-1))
+                market = self.market_list[int(random() * self.markets)]
+                quad_i = int((np.floor(((position[1] + city_loc[0]) % self.side_length) / self.side_length * (
+                            self.dim - 1)) * self.dim)) + int(
+                    ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim - 1))
 
-
-                p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length, market, icu, self.quad, quad_i, self.dim)
+                p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length,
+                           market, icu, self.quad, quad_i, self.dim)
                 self.people_list.append([position, p])
 
                 self.quad[quad_i].append(p)
                 # self.canvas.itemconfig(p.shape, fill = _from_rgb(((2*quad_i**3)%255, (3*quad_i**3)%255, (5*quad_i**2)%255))) # for testing how our grid is spread
-
 
         # We'll say nobody starts out as immune
         self.num_immune = 0
@@ -159,17 +163,15 @@ class City:
         self.num_dead = 0
         self.patient_zeros = []
         # Select the lucky patient zeros randomly
-        while(len(set(self.patient_zeros)) != 3): # we check len(set()) because
-                                                # it's possible that we choose the same person
-                                                # multiple times.
-            self.patient_zeros.append(int(random()*population))
-            self.patient_zeros = list(set(self.patient_zeros)) # Remove duplicates if we add one
+        while (len(set(self.patient_zeros)) != 3):  # we check len(set()) because
+            # it's possible that we choose the same person
+            # multiple times.
+            self.patient_zeros.append(int(random() * population))
+            self.patient_zeros = list(set(self.patient_zeros))  # Remove duplicates if we add one
         # Set status of patient zeros to infected, change their color to red
         for patient in self.patient_zeros:
             self.people_list[patient][1].status = "Infected"
             self.canvas.itemconfig(self.people_list[patient][1].shape, fill='red')
-
-
 
     def next_day(self):
         # Check how many people are infected. A value of
@@ -178,7 +180,7 @@ class City:
 
         # If more than .4% of the population is infected, full
         # social distancing policies are in place.
-        if(perc_inf_adj > 4):
+        if perc_inf_adj > 4:
             new_speed = self.social_distancing_policies[4]
         else:
             new_speed = self.social_distancing_policies[perc_inf_adj]
@@ -196,15 +198,13 @@ class City:
             before = person.status
             before_position = person.position
             person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey)
-            if(before != person.status):
+            if (before != person.status):
                 self.adjust(before, person.status)
             if person.status == "Quarantined" and person.position == person.local_icu and before_position != person.position:
                 self.num_icu += 1
             if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
                 self.num_icu -= 1
         self.change_infected()
-
-
 
     def change_infected(self):
         for p in self.people_list:
@@ -214,19 +214,19 @@ class City:
                 self.num_infected += 1
 
     def adjust(self, before, after):
-        if(before == "Healthy"):
+        if (before == "Healthy"):
             self.num_healthy -= 1
-        elif(before == "Quarantined"):
+        elif (before == "Quarantined"):
             self.num_infected -= 1
             self.num_quarantined -= 1
         elif before == "Infected" and after == "Immune":
             self.num_infected -= 1
 
-        if(after == "Immune"):
+        if (after == "Immune"):
             self.num_immune += 1
-        elif(after == "Infected"):
+        elif (after == "Infected"):
             self.num_infected += 1
-        elif(after == "Quarantined"):
+        elif (after == "Quarantined"):
             self.num_quarantined += 1
 
     def print_pos(self, day):
