@@ -43,6 +43,7 @@ def n(tk, city_list):
         else:
             break
         if count == len(city_list):
+            graph()
             sys.exit(0)
     tk.after(t,  n(tk, city_list))
 
