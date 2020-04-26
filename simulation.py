@@ -14,7 +14,7 @@ from Parameters import *
 city_data = {}
 total_data = {"Totals" : [[],[],[],[],[],[]]}
 t = 0
-cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (5000, 400, "Semi-Urban", "Conyers", [3.5,3.5]), (500, 70, "Rural", "Covington", [6,0])]
+cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (1000, 400, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 70, "Rural", "Covington", [6,0])]
 fig, axs = plt.subplots(2,2)
 time_list = [0]
 
@@ -90,8 +90,11 @@ def graph():
         current_graph.set_title(city)
         current_graph.set_xlabel("# of Days")
         current_graph.set_ylabel("# of People")
+        if city == "Atlanta":
+            print(data[5])
     plt.tight_layout()
     plt.show()
+
 
 atexit.register(graph)
 if __name__ == "__main__":
