@@ -160,6 +160,7 @@ class City:
                             position = icu
                 #assign them a local market randomly.
                 market = self.market_list[int(random() * self.markets)]
+                #generate their cell number based on their position - we simply assume that all cells put together cover the city area, so we find the proportion of position to the maximum position and then get the cell number from that
                 quad_i = int((np.floor(((position[1] + city_loc[0]) % self.side_length) / self.side_length * (
                             self.dim - 1)) * self.dim)) + int(
                     ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim - 1))
