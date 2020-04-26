@@ -21,7 +21,7 @@ class City:
 
         self.canvas = canvas
 
-        # Percent of people still working based on city type
+        # Percent of people still working (essential workers)based on city type
         self.perc_working_dict = {
             "Urban": .20,
             "Semi-Urban": .10,
