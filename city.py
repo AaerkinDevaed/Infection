@@ -198,8 +198,7 @@ class City:
             if person.status == "Quarantined" and person.position == person.local_icu and before_position != person.position:
                 self.num_icu += 1
             if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
-                print("count:")
-                print(self.num_icu)
+                
                 self.num_icu -= 1
         self.change_infected()
 

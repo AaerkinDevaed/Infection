@@ -222,8 +222,7 @@ class Person:
                     self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
                                      (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
-                    print("sendinghome:")
-                    print(parent.num_icu)
+
                     if random.random() < death_rate*2:
                         parent.num_dead += 1
                         self.canvas.delete(self.shape)
