@@ -15,9 +15,9 @@ class City:
     def __init__(self, canvas, population, pop_density, city_type, city_name, city_loc):
         # Method for initializing and constructing our city object
 
-        self.dim = int(np.ceil(np.sqrt(population / 10)))
-        w = self.dim * self.dim;
-        self.quad = [[0 for x in range(0)] for y in range(w)]
+        self.dim = int(np.ceil(np.sqrt(population / 10)))          # find number of cells (dim^2) by assuming each cell has on average 10 people
+        w = self.dim * self.dim;                                   # find dim^2
+        self.quad = [[0 for x in range(0)] for y in range(w)]      # create array for cells, x is the person and y is the cells
 
         self.canvas = canvas
 

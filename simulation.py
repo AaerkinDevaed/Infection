@@ -13,7 +13,7 @@ import time
 from Parameters import *
 
 city_data = {}
-total_data = {"Totals" : [[],[],[],[],[],[]]}
+total_data = {"Totals": [[], [], [], [], [], []]}
 t = 0
 cities = [(10000, 2000, "Urban", "Atlanta", [0,0]), (5000, 1000, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 200, "Rural", [6,0])]
 # create figures for our 3 cities
@@ -21,8 +21,9 @@ cities = [(10000, 2000, "Urban", "Atlanta", [0,0]), (5000, 1000, "Semi-Urban", "
 fig, axs = plt.subplots(2,2)
 time_list = [0]
 
+
 def n(tk, city_list):
-    time.sleep(t)
+    time.sleep(t)  # delay for animation, tk.after wouldn't create one
     next_day = time_list[-1] + 1
     # We append 0 so that we can add in-place later (lines 40-41).
     for tracked_list in total_data["Totals"]:
@@ -40,7 +41,7 @@ def n(tk, city_list):
         # so that we can graph all results added together
         for i, tracked_list in enumerate(total_data["Totals"]):
             tracked_list[next_day] += city_data[city.city_name][i][next_day]
-    tk.update()
+    tk.update()  # after we update the city we move to next frame of animation
     # This checks to see if all three cities have no infected citizens.
     # if so, we end the simulation.
     count = 0
@@ -53,12 +54,13 @@ def n(tk, city_list):
             graph()
             sys.exit(0)
     time_list.append(next_day)
-    tk.after(t,  n(tk, city_list))
+    tk.after(t, n(tk, city_list))  # recursively call next frame/day
+
 
 def main():
-    tk = tkinter.Tk()
-    canvas = tkinter.Canvas(tk, width=1920, height=1040, bg="white")
-    canvas.pack()
+    tk = tkinter.Tk()  # create tkinter object abd canvas in it
+    canvas = tkinter.Canvas(tk, width=1920, height=1040, bg="white")  # the actual window w/ graphics
+    canvas.pack()  # standard tkinter call that would organize any buttons we could have, is proper to still have it
     city_list = []
     # same as in line 26
     for tracked_list in total_data["Totals"]:
@@ -70,18 +72,22 @@ def main():
         city_type = city[2]
         city_name = city[3]
         city_loc = city[4]
-        city = City(canvas, population, pop_density, city_type, city_name, city_loc)
-        per_city_data = [[city.num_immune],[city.num_healthy],[city.num_infected],[city.num_quarantined],[city.num_icu],[city.num_dead]]
+        city = City(canvas, population, pop_density, city_type, city_name,
+                    city_loc)  # pass window (canvas) to city for creating objects on it
+        per_city_data = [[city.num_immune], [city.num_healthy], [city.num_infected], [city.num_quarantined],
+                         [city.num_icu], [city.num_dead]]
         city_data[city_name] = per_city_data
         city_list.append(city)
-        canvas.create_text((city_loc[0]+city.side_length/2) * scale + shift, (city_loc[1]+city.side_length + 0.5) * scale + shift, text=city_name,
-                                font=("Purisa", 45), fill="Black")
+        canvas.create_text((city_loc[0] + city.side_length / 2) * scale + shift,
+                           (city_loc[1] + city.side_length + 0.5) * scale + shift, text=city_name,
+                           font=("Purisa", 45), fill="Black")
         # initialize first positions for total data trackers
         for i, tracked_list in enumerate(total_data["Totals"]):
             tracked_list[0] += per_city_data[i][0]
-    tk.update()
+    tk.update()  # create first frame of city
 
-    n(tk, city_list)
+    n(tk, city_list)  # call recursive animation
+
 
 def graph():
     # We double the last element so that time matches with tracker totals
@@ -94,12 +100,12 @@ def graph():
         col = i % 2
         current_graph = axs[row][col]
         current_graph.clear()
-        current_graph.plot(time_list, data[0], color = "green", label = "Immune")
-        current_graph.plot(time_list, data[1], color = "blue", label = "Healthy")
-        current_graph.plot(time_list, data[2], color = "red", label = "Infected")
-        current_graph.plot(time_list, data[3], color = "yellow", label = "Quarantined")
-        current_graph.plot(time_list, data[4], color = "pink", label = "ICU")
-        current_graph.plot(time_list, data[5], color = "black", label = "Dead")
+        current_graph.plot(time_list, data[0], color="green", label="Immune")
+        current_graph.plot(time_list, data[1], color="blue", label="Healthy")
+        current_graph.plot(time_list, data[2], color="red", label="Infected")
+        current_graph.plot(time_list, data[3], color="yellow", label="Quarantined")
+        current_graph.plot(time_list, data[4], color="pink", label="ICU")
+        current_graph.plot(time_list, data[5], color="black", label="Dead")
         current_graph.legend()
         current_graph.set_title(city)
         current_graph.set_xlabel("# of Days")
