@@ -25,7 +25,7 @@ class Person:
         self.position = position
         self.local_market = local_market
         self.local_icu = local_icu
-        self.still_working = still_working
+        self.still_working = still_working     #bools of whether a person is still working and whether he works at icu
         self.icu_worker = icu_worker
         self.time_sick = 0
         self.time_to_last_market = 0
