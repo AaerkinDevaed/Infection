@@ -50,7 +50,7 @@ class City:
         }
 
         # Speed of nonessential worker based on city-type and infection
-        # percentage level.
+        # percentage level. - rural cities tend to have more movement
         if city_type == "Urban":
             self.social_distancing_policies = {
             0 : .15,
@@ -98,19 +98,19 @@ class City:
         self.market_list = []
         for x in range(self.markets):
             # randomly pick a position in our city.
-            market_position = [random() * self.side_length + city_loc[0], random() * self.side_length + city_loc[1]]
+            market_position = [random() * self.side_length , random() * self.side_length ]
             # save position of the market and then put it on canvas
             self.market_list.append(market_position)
-            self.canvas.create_text((market_position[0]) * scale + shift, (market_position[1]) * scale + shift,
+            self.canvas.create_text((market_position[0] + city_loc[0]) * scale + shift, (market_position[1] + city_loc[1]) * scale + shift,
                                     text="MARKET", font=("Purisa", 20), fill="Green")
 
         self.icu_list = []
         for x in range(self.icus):
             # randomly pick a position in our city.
-            icu_position = [random() * self.side_length + city_loc[0], random() * self.side_length + city_loc[1]]
+            icu_position = [random() * self.side_length, random() * self.side_length ]
             # save position of the icu and then put it on canvas
             self.icu_list.append(icu_position)
-            self.canvas.create_text((icu_position[0]) * scale + shift, (icu_position[1]) * scale + shift, text="ICU",
+            self.canvas.create_text((icu_position[0] + city_loc[0]) * scale + shift, (icu_position[1]+ city_loc[1]) * scale + shift, text="ICU",
                                     font=("Purisa", 20), fill="Purple")
 
         # Populate our city with people, houses
@@ -120,8 +120,8 @@ class City:
         # people.
         while (current_pop < self.population):
             # Randomly generate x and y coordinates of homes
-            x_home = random() * self.side_length + city_loc[0]
-            y_home = random() * self.side_length + city_loc[1]
+            x_home = random() * self.side_length
+            y_home = random() * self.side_length
 
             # Put up to 5 people in each house based on picking from
             # a Gaussian distribution centered at 3 with standard deviation
@@ -161,14 +161,14 @@ class City:
                 #assign them a local market randomly.
                 market = self.market_list[int(random() * self.markets)]
                 #generate their cell number based on their position - we simply assume that all cells put together cover the city area, so we find the proportion of position to the maximum position and then get the cell number from that
-                quad_i = int((np.floor(((position[1] + city_loc[0]) % self.side_length) / self.side_length * (
+                quad_i = int((np.floor(((position[1] ) % self.side_length) / self.side_length * (
                             self.dim - 1)) * self.dim)) + int(
-                    ((position[0] + city_loc[1]) % self.side_length) / self.side_length * (self.dim - 1))
+                    ((position[0] ) % self.side_length) / self.side_length * (self.dim - 1))
 
                 # Create the person object using the parameters we have
                 # generated
                 p = Person(self.canvas, age, home, status, position, still_working, icu_worker, self.side_length,
-                           market, icu, self.quad, quad_i, self.dim)
+                           market, icu, self.quad, quad_i, self.dim, city_loc)
                 self.people_list.append([position, p])
 
                 self.quad[quad_i].append(p)

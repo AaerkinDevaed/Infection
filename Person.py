@@ -12,7 +12,7 @@ from Parameters import *
 
 class Person:
     def __init__(self, canvas, age, home, status, position, still_working, icu_worker, edge_size, local_market,
-                 local_icu, quad, quad_i, dim):
+                 local_icu, quad, quad_i, dim, city_loc):
         self.dim = dim  # the dimension for the grid
         self.quad = quad  # array of grid
         self.quad_i = quad_i  # starting position in grid
@@ -27,11 +27,12 @@ class Person:
         self.still_working = still_working  # bools of whether a person is still working and whether he works at icu
         self.icu_worker = icu_worker
         self.time_sick = 0
+        self.city_loc = city_loc
         self.time_to_last_market = 0
-        self.shape = canvas.create_oval(self.position[0] * scale + shift, self.position[1] * scale + shift,
+        self.shape = canvas.create_oval((self.position[0] + city_loc[0]) * scale + shift, (self.position[1] + city_loc[1]) * scale + shift,
                                         # creating tkinter object for person
-                                        self.position[0] * scale + size + shift,
-                                        self.position[1] * scale + size + shift, fill='blue')
+                                        (self.position[0]+ city_loc[0]) * scale + size + shift,
+                                        (self.position[1]+ city_loc[1]) * scale + size + shift, fill='blue')
 
     def move(self, speed, work_increase_in_chance):
         if (
@@ -200,7 +201,7 @@ class Person:
                 self.position = self.home
                 self.canvas.itemconfig(self.shape, fill='yellow')
             if random.random() < perc_to_icu:
-                self.canvas.move(self.shape, self.local_icu[0] * scale - self.position[0] * scale,
+                self.canvas.move(self.shape, (self.local_icu[0]) * scale - self.position[0] * scale,
                                  (self.local_icu[1] * scale) - (self.position[1] * scale))
                 self.position = self.local_icu
                 self.canvas.itemconfig(self.shape, fill='pink')
@@ -209,7 +210,7 @@ class Person:
                 self.status = "Immune"
                 self.canvas.itemconfig(self.shape, fill='grey')
                 if self.position == self.local_icu:
-                    self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+                    self.canvas.move(self.shape, (self.home[0]) * scale - self.position[0] * scale,
                                      (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
                 if random.random() < death_rate:  # some people die, so we delete their moving dot and add to number of dead and subtr from num of immune (bc at end of day they'll be counted as new immune)
