@@ -15,7 +15,7 @@ from Parameters import *
 city_data = {}
 total_data = {"Totals": [[], [], [], [], [], []]}
 t = 0
-cities = [(10000, 2000, "Urban", "Atlanta", [0,0]), (5000, 1000, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 200, "Rural", [6,0])]
+cities = [(10000, 2000, "Urban", "Atlanta", [0,0]), (5000, 1000, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 200, "Rural", "Covington", [6,0])]
 # create figures for our 3 cities
 # this would have to be changed depending on city count
 fig, axs = plt.subplots(2,2)
