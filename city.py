@@ -195,9 +195,10 @@ class City:
             person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey)
             if(before != person.status):
                 self.adjust(before, person.status)
-            if person.status == "Quarantined" and person.position == person.local_icu:
+            if person.status == "Quarantined" and person.position == person.local_icu and before_position != person.position:
                 self.num_icu += 1
             if person.status == "Immune" and before == "Quarantined" and before_position == person.local_icu:
+                
                 self.num_icu -= 1
         self.change_infected()
 

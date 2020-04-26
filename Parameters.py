@@ -7,4 +7,4 @@ avg_sicktime = 14
 avg_markettime = 5
 perc_to_icu = 0.03
 death_rate = 0.05
-strength = 0.8
+strength = 1

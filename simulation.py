@@ -14,7 +14,7 @@ from Parameters import *
 city_data = {}
 total_data = {"Totals" : [[],[],[],[],[],[]]}
 t = 0
-cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (1000, 400, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 70, "Rural", "Covington", [6,0])]
+cities = [(25000, 2000, "Urban", "Atlanta", [0,0])]
 fig, axs = plt.subplots(2,2)
 time_list = [0]
 
@@ -25,7 +25,7 @@ def n(tk, city_list):
         tracked_list.append(0)
     for city in city_list:
         city.next_day()
-        city.change_infected()
+
         city_data[city.city_name][0].append(city.num_immune)
         city_data[city.city_name][1].append(city.num_healthy)
         city_data[city.city_name][2].append(city.num_infected)
