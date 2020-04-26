@@ -91,7 +91,7 @@ def main():
 
 def graph():
     # We double the last element so that time matches with tracker totals
-    # because it exits before adding to totals.
+    # because it exits before adding to totals, a tkinter quirk
     for i, list_tracker in enumerate(total_data['Totals']):
         total_data['Totals'][i] = list_tracker[:-1]
     # Graph each of our data trackers
