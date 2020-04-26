@@ -8,14 +8,13 @@ import atexit
 matplotlib.use('tkagg')
 import matplotlib.pyplot as plt
 import tkinter
-import sys
 import time
 from Parameters import *
 
 city_data = {}
 total_data = {"Totals": [[], [], [], [], [], []]}
 t = 0
-cities = [(1000, 1000, "Urban", "Atlanta", [0,0]), (1000, 800, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 200, "Rural", "Covington", [6,0])]
+cities = [(10000, 1000, "Urban", "Atlanta", [0,0]), (1000, 800, "Semi-Urban", "Conyers", [3.5,3.5]), (1000, 200, "Rural", "Covington", [6,0])]
 # create figures for our 3 cities
 # this would have to be changed depending on city count
 fig, axs = plt.subplots(2,2)
@@ -42,17 +41,6 @@ def n(tk, city_list):
         for i, tracked_list in enumerate(total_data["Totals"]):
             tracked_list[next_day] += city_data[city.city_name][i][next_day]
     tk.update()  # after we update the city we move to next frame of animation
-    # This checks to see if all three cities have no infected citizens.
-    # if so, we end the simulation.
-    count = 0
-    for city in city_list:
-        if city.num_infected == 0:
-            count += 1
-        else:
-            break
-        if count == len(city_list):
-            graph()
-            sys.exit(0)
     time_list.append(next_day)
     tk.after(t, n(tk, city_list))  # recursively call next frame/day
 
