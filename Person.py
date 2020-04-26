@@ -222,14 +222,17 @@ class Person:
                     self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
                                      (self.home[1] * scale) - (self.position[1] * scale))
                     self.position = self.home
-                self.canvas.itemconfig(self.shape, fill='grey')
-                if(self.position == self.local_icu):
+                    print("sendinghome:")
+                    print(parent.num_icu)
                     if random.random() < death_rate*2:
                         parent.num_dead += 1
                         self.canvas.delete(self.shape)
                     elif random.random() < death_rate:
                         self.canvas.delete(self.shape)
                         parent.num_dead += 1
+                self.canvas.itemconfig(self.shape, fill='grey')
+
+
 
     def update_quad (self):
         if self in self.quad[self.quad_i]:
