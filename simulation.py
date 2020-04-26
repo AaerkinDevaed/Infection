@@ -38,12 +38,12 @@ def n(tk, city_list):
     time_list.append(next_day)
     count = 0
     for city in city_list:
-        if count == len(city_list):
-            sys.exit(0)
         if city.num_infected == 0:
             count += 1
         else:
             break
+        if count == len(city_list):
+            sys.exit(0)
     tk.after(t,  n(tk, city_list))
 
 def main():
