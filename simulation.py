@@ -25,7 +25,7 @@ def n(tk, city_list):
         tracked_list.append(0)
     for city in city_list:
         city.next_day()
-        city.change_infected()
+
         city_data[city.city_name][0].append(city.num_immune)
         city_data[city.city_name][1].append(city.num_healthy)
         city_data[city.city_name][2].append(city.num_infected)
