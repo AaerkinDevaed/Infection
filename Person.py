@@ -2,7 +2,7 @@
 """
 Created on %(date)s
 
-@author: %(Daniil Huryn)s
+@author: Daniil and Mack
 """
 import random
 import math
@@ -59,8 +59,9 @@ class Person:
             return
 
         if random.random() < self.time_to_last_market / avg_markettime:  # the more time someone hasn't been to a market, the more likely he is to go, with a max possible time for not going
+            self.time_to_last_market = 0
             self.position = self.local_market
-            self.canvas.move(self.shape, *self.local_market[0] * scale - self.home[0] * scale,
+            self.canvas.move(self.shape, self.local_market[0] * scale - self.home[0] * scale,
                              (self.local_market[1] * scale) - (self.home[1] * scale))
             return
 
@@ -85,12 +86,13 @@ class Person:
             self.canvas.move(self.shape, speed * direc[0] * scale,
                              speed * direc[1] * scale)
 
-        if (np.sqrt((self.position[0] - self.home[0]) ** 2 + (self.position[1] - self.home[
-            1]) ** 2) > 0.5):  # even with direction more likely to be home, we still send people home if they stray too far
-            self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
-                             (self.home[1] * scale) - (self.position[1] * scale))
-            self.position[0] = self.home[0]
-            self.position[1] = self.home[1]
+        # tkinter bugs with this addition for some reason, so people are able to leave the city. But this is realistic
+        # if (np.sqrt((self.position[0] - self.home[0]) ** 2 + (self.position[1] - self.home[
+        #     1]) ** 2) > 0.5):  # even with direction more likely to be home, we still send people home if they stray too far
+        #     self.canvas.move(self.shape, self.home[0] * scale - self.position[0] * scale,
+        #                      (self.home[1] * scale) - (self.position[1] * scale))
+        #     self.position[0] = self.home[0]
+        #     self.position[1] = self.home[1]
 
     def direct(
             self):  # generating a random direction for someone to go to, with home being the peak of the random distribution of directions (gaussian)
