@@ -24,7 +24,7 @@ time_list = [0]
 def n(tk, city_list):
     time.sleep(t)  # delay for animation, tk.after wouldn't create one
     next_day = time_list[-1] + 1
-    # We append 0 so that we can add in-place later (lines 40-41).
+    # We append 0 so that we can add in-place later (lines 41-42).
     for tracked_list in total_data["Totals"]:
         tracked_list.append(0)
     # for each city, advance to the next day, and track all of our variables
@@ -50,7 +50,7 @@ def main():
     canvas = tkinter.Canvas(tk, width=1920, height=1040, bg="white")  # the actual window w/ graphics
     canvas.pack()  # standard tkinter call that would organize any buttons we could have, is proper to still have it
     city_list = []
-    # same as in line 26
+    # same as in line 27
     for tracked_list in total_data["Totals"]:
         tracked_list.append(0)
     # Initialize cities and city data trackers.
