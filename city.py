@@ -89,8 +89,8 @@ class City:
         self.area = float(population) / pop_density
 
         # Letting there be 1 market and 1 ICU per 500 people.
-        self.markets = int(population / 500)
-        self.icus = int(population / 500)
+        self.markets = int(population / 500) + 1
+        self.icus = int(population / 500) + 1
         self.people_list = []
         self.side_length = np.sqrt(self.area)
 
