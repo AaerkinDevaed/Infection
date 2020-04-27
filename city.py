@@ -228,7 +228,7 @@ class City:
             # which counts we have to update
             before = person.status
             before_position = person.position
-            person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey)
+            person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey * strength)
             if (before != person.status):
                 # adjust takes care of basic status changes
                 self.adjust(before, person.status, person)
