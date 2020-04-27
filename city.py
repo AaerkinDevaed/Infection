@@ -76,7 +76,7 @@ class City:
             4 : .50 - .45 * strength,
         }
         # use dicts to assign values depending on city type.
-        self.perc_obey = self.testing_obey_dict[city_type]
+        self.perc_obey = self.testing_obey_dict[city_type] * strength
         self.perc_working = self.perc_working_dict[city_type]
         self.life_expectancy = self.life_expectancy_dict[city_type]
         self.chance_know_sick = self.testing_efficieny_dict[city_type]
@@ -228,7 +228,7 @@ class City:
             # which counts we have to update
             before = person.status
             before_position = person.position
-            person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey * strength)
+            person.change_in_status(self, self.people_list, self.chance_know_sick, self.perc_obey)
             if (before != person.status):
                 # adjust takes care of basic status changes
                 self.adjust(before, person.status, person)
