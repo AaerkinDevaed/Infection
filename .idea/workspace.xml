@@ -51,7 +51,7 @@
   <component name="PropertiesComponent">
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
     <configuration name="simulation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -123,41 +123,63 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="261" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587933822057" />
-    <state width="1899" height="269" key="GridCell.Tab.0.bottom" timestamp="1587936981993">
+    <state width="1899" height="269" key="GridCell.Tab.0.bottom" timestamp="1587950982780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587936981993" />
-    <state width="1899" height="269" key="GridCell.Tab.0.center" timestamp="1587936981993">
+    <state width="1899" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587950982780" />
+    <state width="1899" height="269" key="GridCell.Tab.0.center" timestamp="1587950982780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="269" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587936981993" />
-    <state width="1899" height="269" key="GridCell.Tab.0.left" timestamp="1587936981993">
+    <state width="1899" height="269" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587950982780" />
+    <state width="1899" height="269" key="GridCell.Tab.0.left" timestamp="1587950982780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="269" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587936981993" />
-    <state width="1899" height="269" key="GridCell.Tab.0.right" timestamp="1587936981993">
+    <state width="1899" height="269" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587950982780" />
+    <state width="1899" height="269" key="GridCell.Tab.0.right" timestamp="1587950982780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="269" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587936981993" />
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1586822982695">
+    <state width="1899" height="269" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587950982780" />
+    <state width="1899" height="340" key="GridCell.Tab.1.bottom" timestamp="1587950514242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586822982695" />
-    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1586822982695">
+    <state width="1899" height="340" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587950514242" />
+    <state width="1899" height="340" key="GridCell.Tab.1.center" timestamp="1587950514242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586822982695" />
-    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1586822982695">
+    <state width="1899" height="340" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587950514242" />
+    <state width="1899" height="340" key="GridCell.Tab.1.left" timestamp="1587950514242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586822982695" />
-    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1586822982695">
+    <state width="1899" height="340" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587950514242" />
+    <state width="1899" height="340" key="GridCell.Tab.1.right" timestamp="1587950514242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586822982695" />
-    <state x="399" y="0" width="1150" height="815" key="SettingsEditor" timestamp="1587934235045">
+    <state width="1899" height="340" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587950514242" />
+    <state x="399" y="0" width="1150" height="815" key="SettingsEditor" timestamp="1587946476257">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="399" y="0" width="1150" height="815" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587934235045" />
+    <state x="399" y="0" width="1150" height="815" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587946476257" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1587949585869">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1587949585869" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Person.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

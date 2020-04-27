@@ -90,7 +90,11 @@ class City:
 
         # Letting there be 1 market and 1 ICU per 500 people.
         self.markets = int(population / 500)
+        if self.markets == 0:
+            self.markets = 1
         self.icus = int(population / 500)
+        if self.icus == 0:
+            self.icus = 1
         self.people_list = []
         self.side_length = np.sqrt(self.area)
 
