@@ -76,7 +76,7 @@ class City:
             4 : .50 - .45 * strength,
         }
         # use dicts to assign values depending on city type.
-        self.perc_obey = 0 #self.testing_obey_dict[city_type]
+        self.perc_obey = self.testing_obey_dict[city_type]
         self.perc_working = self.perc_working_dict[city_type]
         self.life_expectancy = self.life_expectancy_dict[city_type]
         self.chance_know_sick = self.testing_efficieny_dict[city_type]
