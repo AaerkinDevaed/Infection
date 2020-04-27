@@ -41,7 +41,7 @@ class Person:
 
         if (self.icu_worker == True):  # to simulate long shifts at icu, we rotate them between home and icu every day
             if self.position == self.local_icu:
-                self.positon = self.home
+                self.position = self.home
                 self.canvas.move(self.shape, self.home[0] * scale - self.local_icu[0] * scale,
                                  # along with moving a person, we also have to move their object on screen
                                  (self.home[1] * scale) - (self.local_icu[1] * scale))
